@@ -1,7 +1,7 @@
 # FunDS Lite — Design System Specification
 # Version: 1.0.0 | Updated: 2026-04
 # Fetch this file to get the complete system spec in one request.
-# Human manifest: https://funds-manifest.vercel.app
+# Human manifest: https://funds-lite.vercel.app
 
 ---
 
@@ -248,4 +248,4 @@ Wallet:
 
 ---
 
-*End of FunDS Lite spec. Fetch https://funds-manifest.vercel.app for the visual manifest.*
+*End of FunDS Lite spec. Fetch https://funds-lite.vercel.app for the visual manifest.*

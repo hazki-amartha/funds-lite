@@ -71,7 +71,7 @@ const TOKENS = [
 ]
 
 const CLAUDE_PROMPT = `You are building UI for Amartha Financial (https://amartha.com/), a micro-finance lending company focused on productive micro loans for grassroot women in Indonesia, using the FunDS Lite design system.
-Read the full spec: https://funds-manifest.vercel.app/llms.txt
+Read the full spec: https://funds-lite.vercel.app/llms.txt
 
 AMARTHA PRODUCT CONTEXT:
 
@@ -135,7 +135,63 @@ no-arbitrary  = never use w-[x] or text-[#xxx] Tailwind syntax
 no-extra-hex  = only use hex values listed above
 font-only     = Inter only, no other Google Fonts`
 
-const DESIGN_MD = `# FunDS Lite — DESIGN.md
+const DESIGN_MD = `---
+version: "1.0.0"
+name: "FunDS Lite"
+description: "Lightweight design system for Amartha Financial. Covers tokens, typography, spacing, and core components for AmarthaFin App (consumer mobile) and NG-MIS (internal dashboard)."
+colors:
+  primary:          "#853291"
+  primary-hover:    "#732C7C"
+  primary-tint:     "#FEF3FF"
+  text-default:     "#111928"
+  text-caption:     "#6B7280"
+  text-disabled:    "#8E95A3"
+  text-placeholder: "#C6CAD0"
+  text-link:        "#853291"
+  border:           "#E5E7EB"
+  surface:          "#FFFFFF"
+  background:       "#F9FAF8"
+  blue-500:         "#056DCE"
+  green-500:        "#009C6A"
+  orange-500:       "#F7941D"
+  red-500:          "#D73630"
+typography:
+  heading-24: { fontSize: "24px", fontWeight: 700, letterSpacing: "-0.02em" }
+  heading-20: { fontSize: "20px", fontWeight: 700, letterSpacing: "-0.01em" }
+  body-18:    { fontSize: "18px", fontWeight: 500 }
+  body-16:    { fontSize: "16px", fontWeight: 500 }
+  body-14:    { fontSize: "14px", fontWeight: 500 }
+  label-12:   { fontSize: "12px", fontWeight: 500, letterSpacing: "0.04em", textTransform: "uppercase" }
+  micro-10:   { fontSize: "10px", fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase" }
+spacing:
+  base:  "4px"
+  scale: [0, 2, 4, 8, 12, 16, 20, 24, 32, 40, 48]
+rounded:
+  sm:     "6px"
+  input:  "8px"
+  card:   "12px"
+  button: "9999px"
+components:
+  button:
+    shape:       "9999px (pill)"
+    font-weight: 700
+    variants:    [primary, secondary, outline, ghost, danger]
+    sizes:       [xs, sm, md, lg, xl]
+  input:
+    radius:     "8px"
+    border:     "#E5E7EB"
+    focus-ring: "3px #FEF3FF + border #853291"
+  badge:
+    shape:     "9999px (pill)"
+    padding:   "3px 10px"
+    font-size: "12px"
+  card:
+    radius:  "12px"
+    border:  "#E5E7EB"
+    padding: "20px"
+---
+
+# FunDS Lite — DESIGN.md
 ## Design System Specification — v1.0.0
 
 ### Amartha Product Context
@@ -156,50 +212,139 @@ Platforms:
 - NG-MIS — Internal ops system / potential CRM
 - A-Partner App — Internal app for field partners/agents
 
-### Brand
-- Primary:      #853291
-- Primary Dark: #732C7C  (hover/pressed)
-- Primary Tint: #FEF3FF  (backgrounds, badge fills)
+---
 
-### Typography
-- Font Family: Inter
-- Weights: 500 (regular), 700 (bold) — no others
-- Scale: 24, 20, 18, 16, 14, 12, 10px
+## Colors
 
-### Semantic Text Colors
-- Default:     #111928  (neutral-900)
-- Caption:     #6B7280  (neutral-600)
-- Disabled:    #8E95A3  (neutral-500)
-- Placeholder: #C6CAD0  (neutral-400)
-- Link:        #853291  (primary-500)
+The brand is anchored in purple (#853291). Hover and pressed states shift to the darker shade (#732C7C). The light tint (#FEF3FF) is used for badge fills, ghost hover backgrounds, and focus rings.
 
-### Spacing (4px rhythm)
-Valid values: 0, 2, 4, 8, 12, 16, 20, 24, 32, 40, 48px
+Status colors are always paired with their 50-tint background — green-500 on green-50, red-500 on red-50, etc. Never use a status color on a white or neutral-50 background without the tint pair.
 
-### Border Radius
-- Small:   6px
-- Input:   8px
-- Button:  9999px (pill shape)
-- Card:    12px
-- Large:   20px
+Never invent a hex value outside this spec. When in doubt, use neutral-900 (#111928) for text and neutral-200 (#E5E7EB) for borders.
 
-### Status Colors
-- Info:    #056DCE (blue-500)
-- Success: #009C6A (green-500)
-- Warning: #F7941D (orange-500)
-- Danger:  #D73630 (red-500)
+### Brand (Primary Purple)
+| Token         | Hex       | Usage                                     |
+|---------------|-----------|-------------------------------------------|
+| primary-50    | #FEF3FF   | Badge fill, focus ring, ghost hover bg    |
+| primary-400   | #A642B7   | Secondary actions, decorative             |
+| primary-500   | #853291   | Buttons, links, active states (PRIMARY)   |
+| primary-600   | #732C7C   | Hover / pressed state                     |
+| primary-900   | #3D1042   | Deep emphasis                             |
 
-### Component Variants
-**Button**: primary, secondary, outline/tertiary, ghost, danger — shape: pill (9999px) — sizes: xs, sm, default/md, lg, xl
-**Input**: default, prefix/suffix, valid, error — radius: 8px — sizes: sm, default, lg
-**Badge**: primary, blue, green, orange, red, yellow, neutral
-**Card**: surface container with 12px radius and neutral-200 border
+### Neutral
+| Token         | Hex       | Usage                                     |
+|---------------|-----------|-------------------------------------------|
+| neutral-white | #FFFFFF   | Surface / card backgrounds                |
+| neutral-50    | #F9FAF8   | Page background                           |
+| neutral-200   | #E5E7EB   | Borders (default)                         |
+| neutral-400   | #C6CAD0   | Placeholder text                          |
+| neutral-500   | #8E95A3   | Disabled state                            |
+| neutral-600   | #6B7280   | Caption / secondary text                  |
+| neutral-900   | #111928   | Default text (darkest)                    |
 
-### AI Guardrails
-- Only use hex values from this spec
-- Only Inter at weight 500 or 700
-- Only spacing values from the scale above
-- No arbitrary Tailwind values
+### Status
+| Token       | Hex       | Bg tint | Usage              |
+|-------------|-----------|---------|--------------------|
+| blue-500    | #056DCE   | #EDF7FF | Informational      |
+| green-500   | #009C6A   | #E4FCEF | Success / funded   |
+| orange-500  | #F7941D   | #FDF4E9 | Warning / pending  |
+| red-500     | #D73630   | #FFF4F3 | Error / danger     |
+
+---
+
+## Typography
+
+Inter is the only permitted typeface. Use weight 500 for all body text and 700 for headings and button labels — no other weights. Labels (12px) and micro text (10px) are always uppercase with positive letter-spacing.
+
+| Token      | Size  | Weight | Letter-spacing | Notes              |
+|------------|-------|--------|----------------|--------------------|
+| heading-24 | 24px  | 700    | -0.02em        | Page titles        |
+| heading-20 | 20px  | 700    | -0.01em        | Section headings   |
+| body-18    | 18px  | 500    | 0              | Primary reading    |
+| body-16    | 16px  | 500    | 0              | Secondary text     |
+| body-14    | 14px  | 500    | 0              | Tables, compact    |
+| label-12   | 12px  | 500    | +0.04em        | Labels (UPPERCASE) |
+| micro-10   | 10px  | 500    | +0.06em        | Overline (UPPERCASE) |
+
+---
+
+## Shapes
+
+Three radius tiers — use them deliberately:
+- **Pill (9999px):** Buttons and badges only
+- **8px:** Inputs, selects, textareas
+- **12px:** Cards, modals, drawers
+- **6px:** Chips, small tags
+
+---
+
+## Components
+
+### Button
+Shape: pill (9999px). Font weight: 700. Never use rectangular or lightly rounded buttons — the pill is the only permitted button shape.
+
+| Variant   | Background  | Border      | Text      | Hover bg    |
+|-----------|-------------|-------------|-----------|-------------|
+| primary   | #853291     | inner glow  | white     | #732C7C     |
+| secondary | white       | #853291     | #853291   | tint        |
+| outline   | white       | #E5E7EB     | #111928   | #E5E7EB/50% |
+| ghost     | transparent | transparent | #853291   | #FEF3FF     |
+| danger    | #D73630     | #D73630     | white     | #AC2B26     |
+
+Sizes: xs (12px / 4px 8px) · sm (12px / 8px 10px) · md (14px / 8px 12px) · lg (16px / 12px 16px) · xl (16px / 12px 20px)
+
+Disabled state: neutral-200 bg, neutral-500 text, no shadow, cursor not-allowed.
+Focus ring: 2px white + 4px primary-200 (#E5B8EF) outline.
+
+### Input
+Radius 8px. Border: #E5E7EB. On focus: border shifts to #853291 + 3px #FEF3FF ring.
+
+| State       | Border    | Ring      |
+|-------------|-----------|-----------|
+| default     | #E5E7EB   | —         |
+| focus       | #853291   | #FEF3FF 3px |
+| valid       | #009C6A   | —         |
+| error       | #D73630   | #FFF4F3 3px |
+
+Supports prefix element (left adornment, neutral-50 bg) and suffix element (right adornment).
+
+### Badge
+Shape: pill (9999px). Padding: 3px 10px. Font: 12px / weight 500.
+
+| Variant  | Background | Text      |
+|----------|------------|-----------|
+| primary  | #FEF3FF    | #732C7C   |
+| blue     | #EDF7FF    | #0457A5   |
+| green    | #E4FCEF    | #007D55   |
+| orange   | #FDF4E9    | #AD540A   |
+| red      | #FFF4F3    | #AC2B26   |
+| yellow   | #FFFED9    | #996F03   |
+| neutral  | #F9FAF8    | #6B7280   |
+
+### Card
+Radius 12px. Border: 1px solid #E5E7EB. Background: #FFFFFF. Padding: 20px.
+Use cards to group related fund information. Never nest cards.
+
+---
+
+## Do's and Don'ts
+
+### Do
+- Use primary-500 (#853291) for every primary action button, active state, and link. It is the single brand action color.
+- Pair every status color with its 50-tint background (e.g. red-500 text on red-50 bg).
+- Use Inter at weight 500 or 700 only. No exceptions.
+- Keep spacing values within the 4px scale: 0, 2, 4, 8, 12, 16, 20, 24, 32, 40, 48px.
+- Use semantic token names (text-default, border-default) over raw hex in component code.
+- Use pill radius (9999px) for buttons and badges, 8px for inputs, 12px for cards — always.
+
+### Don't
+- Don't use arbitrary Tailwind values like \`w-[437px]\` or \`text-[#abc]\` — ever.
+- Don't invent hex values not in this token set.
+- Don't use font-weight 400, 600, or 800 — only 500 and 700.
+- Don't use spacing values outside the scale (e.g. 5px, 10px, 15px, 25px).
+- Don't use any Google Font other than Inter.
+- Don't use purple tones from generic Tailwind palettes — only primary-* tokens.
+- Don't use status color on white without the tint bg pair.
 `
 
 // ── Sections for scroll-spy ──────────────────────────────────────────────────
@@ -669,7 +814,7 @@ export default function ManifestPage() {
               <p className="section-sub">Machine-readable endpoint — one fetch gives an LLM the complete system</p>
             </div>
             <div className="notice">
-              <strong>AI Agents:</strong> Fetch <code>https://funds-manifest.vercel.app/llms.txt</code> to get the full
+              <strong>AI Agents:</strong> Fetch <code>https://funds-lite.vercel.app/llms.txt</code> to get the full
               spec in one request. No HTML, no scripts — clean markdown covering all color tokens, spacing, typography
               rules, component usage, and do/don&apos;t guardrails.
             </div>

@@ -442,7 +442,7 @@ body{display:flex;min-height:100vh;}
   <div class="section" id="llms">
     <div class="eyebrow"><span class="eyebrow-num">10 ·</span>AI TOOLS</div>
     <div class="section-header"><h2 class="section-title">llms.txt Spec</h2><p class="section-sub">Machine-readable endpoint — one fetch gives an LLM the complete system</p></div>
-    <div class="notice"><strong>AI Agents:</strong> Fetch <code>https://funds-manifest.vercel.app/llms.txt</code> to get the full spec in one request. No HTML, no scripts — clean markdown covering all color tokens, spacing, typography rules, component usage, and do/don't guardrails.</div>
+    <div class="notice"><strong>AI Agents:</strong> Fetch <code>https://funds-lite.vercel.app/llms.txt</code> to get the full spec in one request. No HTML, no scripts — clean markdown covering all color tokens, spacing, typography rules, component usage, and do/don't guardrails.</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;">
       <div style="background:var(--neutral-white);border:1px solid var(--neutral-200);border-radius:10px;padding:14px 16px;"><div style="font-size:12px;font-weight:600;margin-bottom:4px;">Color Tokens</div><div style="font-size:12px;color:var(--neutral-600);">All hex + semantic meaning</div></div>
       <div style="background:var(--neutral-white);border:1px solid var(--neutral-200);border-radius:10px;padding:14px 16px;"><div style="font-size:12px;font-weight:600;margin-bottom:4px;">Typography</div><div style="font-size:12px;color:var(--neutral-600);">Font, weights, size scale</div></div>
@@ -561,7 +561,7 @@ tokens.forEach(t=>{
 
 // Prompts
 const CLAUDE=`You are building UI using the FunDS Lite design system.
-Read the full spec: https://funds-manifest.vercel.app/llms.txt
+Read the full spec: https://funds-lite.vercel.app/llms.txt
 
 LOCKED TOKENS — never use any other values:
 
@@ -607,7 +607,7 @@ full          = 9999px
 [guardrails]
 no-arbitrary  = true
 no-inline-hex = true
-source        = https://funds-manifest.vercel.app/llms.txt`;
+source        = https://funds-lite.vercel.app/llms.txt`;
 
 function renderPromptCode(id,text){
   const el=document.getElementById(id);
@@ -619,7 +619,7 @@ function renderPromptCode(id,text){
 renderPromptCode('claude-body',CLAUDE);
 renderPromptCode('cursor-body',CURSOR);
 
-const DESIGN_MD=`# FunDS Lite — DESIGN.md\n## Design System · v1.0.0 · 2026-04\n\n### Brand Color\nprimary-500: #853291 | primary-600: #732C7C | primary-50: #FEF3FF\n\n### Neutral\nneutral-900: #111928 | neutral-700: #525C6A | neutral-600: #6B7280\nneutral-500: #8E95A3 | neutral-400: #C6CAD0 | neutral-200: #E5E7EB\nneutral-50: #F9FAF8  | neutral-white: #FFFFFF\n\n### Status Colors\nblue-500: #056DCE | green-500: #009C6A | orange-500: #F7941D | red-500: #D73630\n\n### Typography\nfont-family: Inter\nfont-weight: 500 (regular), 700 (bold) — NO other weights\nscale: 10, 12, 14, 16, 18, 20, 24px\n\n### Spacing (4px rhythm)\nvalid: 0, 2, 4, 8, 12, 16, 20, 24, 32, 40, 48px\n\n### Border Radius\nsm: 6px | default: 8px | card: 12px | full: 9999px\n\n### Semantic Tokens\ntext-default: #111928 | text-caption: #6B7280 | text-link: #853291\nborder-default: #E5E7EB | bg-overlay: rgba(17,25,40,0.8)\n\n### Guardrails\n- Only use hex values from this token set\n- Only use Inter at weight 500 or 700\n- No arbitrary Tailwind values\n- Source: https://funds-manifest.vercel.app/llms.txt`;
+const DESIGN_MD=`# FunDS Lite — DESIGN.md\n## Design System · v1.0.0 · 2026-04\n\n### Brand Color\nprimary-500: #853291 | primary-600: #732C7C | primary-50: #FEF3FF\n\n### Neutral\nneutral-900: #111928 | neutral-700: #525C6A | neutral-600: #6B7280\nneutral-500: #8E95A3 | neutral-400: #C6CAD0 | neutral-200: #E5E7EB\nneutral-50: #F9FAF8  | neutral-white: #FFFFFF\n\n### Status Colors\nblue-500: #056DCE | green-500: #009C6A | orange-500: #F7941D | red-500: #D73630\n\n### Typography\nfont-family: Inter\nfont-weight: 500 (regular), 700 (bold) — NO other weights\nscale: 10, 12, 14, 16, 18, 20, 24px\n\n### Spacing (4px rhythm)\nvalid: 0, 2, 4, 8, 12, 16, 20, 24, 32, 40, 48px\n\n### Border Radius\nsm: 6px | default: 8px | card: 12px | full: 9999px\n\n### Semantic Tokens\ntext-default: #111928 | text-caption: #6B7280 | text-link: #853291\nborder-default: #E5E7EB | bg-overlay: rgba(17,25,40,0.8)\n\n### Guardrails\n- Only use hex values from this token set\n- Only use Inter at weight 500 or 700\n- No arbitrary Tailwind values\n- Source: https://funds-lite.vercel.app/llms.txt`;
 
 // Utilities
 let toastTimer;
