@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FunDS Lite — Design Manifest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --brand: #853291;
+    --brand-dark: #6b2376;
+    --brand-light: #f5eaf6;
+    --brand-mid: #c77ecf;
+    --neutral-0: #ffffff;
+    --neutral-50: #f9f9f8;
+    --neutral-100: #f1f0ec;
+    --neutral-200: #e4e3de;
+    --neutral-400: #9c9b95;
+    --neutral-600: #5f5e5a;
+    --neutral-800: #2c2c2a;
+    --neutral-900: #111928;
+    --text-default: #111928;
+    --text-link: #853291;
+    --text-muted: #5f5e5a;
+    --text-subtle: #9c9b95;
+    --radius: 12px;
+    --radius-sm: 6px;
+    --radius-lg: 20px;
+    --font: 'Inter', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+    --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+    --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px;
+  }
+
+  html { font-family: var(--font); font-size: 14px; color: var(--text-default); background: var(--neutral-50); }
+  body { display: flex; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 220px; min-height: 100vh; background: var(--neutral-0);
+    border-right: 1px solid var(--neutral-200); position: fixed; top: 0; left: 0;
+    display: flex; flex-direction: column; overflow-y: auto; z-index: 100;
+  }
+  .sidebar-logo {
+    padding: var(--space-5) var(--space-6); border-bottom: 1px solid var(--neutral-200);
+    display: flex; align-items: center; gap: var(--space-3);
+  }
+  .logo-mark {
+    width: 28px; height: 28px; background: var(--brand);
+    border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center;
+  }
+  .logo-mark svg { width: 16px; height: 16px; fill: white; }
+  .logo-text { font-size: 13px; font-weight: 700; letter-spacing: 0.02em; }
+  .logo-sub { font-size: 11px; color: var(--text-subtle); font-weight: 400; }
+  .nav-section { padding: var(--space-4) var(--space-4) var(--space-2); }
+  .nav-label { font-size: 10px; font-weight: 700; color: var(--text-subtle); letter-spacing: 0.08em; text-transform: uppercase; padding: 0 var(--space-2); margin-bottom: var(--space-2); }
+  .nav-item {
+    display: block; padding: 6px var(--space-2); border-radius: var(--radius-sm);
+    color: var(--text-muted); font-size: 13px; text-decoration: none; cursor: pointer;
+    transition: background 0.1s, color 0.1s; border: none; background: none; width: 100%; text-align: left;
+  }
+  .nav-item:hover { background: var(--neutral-100); color: var(--text-default); }
+  .nav-item.active { background: var(--brand-light); color: var(--brand); font-weight: 500; }
+
+  /* Main */
+  .main { margin-left: 220px; flex: 1; }
+  .topbar {
+    height: 56px; background: var(--neutral-0); border-bottom: 1px solid var(--neutral-200);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 var(--space-8); position: sticky; top: 0; z-index: 50;
+  }
+  .topbar-left { display: flex; align-items: center; gap: var(--space-6); }
+  .topbar-title { font-size: 13px; font-weight: 600; color: var(--text-default); }
+  .topbar-badge {
+    font-size: 10px; padding: 2px 8px; border-radius: 100px;
+    background: var(--brand-light); color: var(--brand); font-weight: 600; letter-spacing: 0.03em;
+  }
+  .topbar-actions { display: flex; gap: var(--space-2); }
+  .btn {
+    display: inline-flex; align-items: center; gap: var(--space-2); padding: 7px 14px;
+    border-radius: var(--radius-sm); font-size: 12px; font-weight: 500; cursor: pointer;
+    border: 1px solid; transition: all 0.15s; white-space: nowrap; font-family: var(--font);
+    text-decoration: none;
+  }
+  .btn-ghost { background: none; border-color: var(--neutral-200); color: var(--text-muted); }
+  .btn-ghost:hover { background: var(--neutral-100); color: var(--text-default); }
+  .btn-brand { background: var(--brand); border-color: var(--brand); color: white; }
+  .btn-brand:hover { background: var(--brand-dark); border-color: var(--brand-dark); }
+  .btn-outline { background: none; border-color: var(--brand); color: var(--brand); }
+  .btn-outline:hover { background: var(--brand-light); }
+
+  /* Content */
+  .content { padding: var(--space-8); max-width: 1100px; }
+  .section { margin-bottom: var(--space-12); }
+  .section-header { margin-bottom: var(--space-6); }
+  .section-title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: var(--space-2); }
+  .section-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-3); }
+  .grid-auto { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--space-4); }
+
+  .card {
+    background: var(--neutral-0); border: 1px solid var(--neutral-200);
+    border-radius: var(--radius); padding: var(--space-5); overflow: hidden;
+  }
+  .card-title { font-size: 11px; font-weight: 700; color: var(--text-subtle); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: var(--space-3); }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--brand) 0%, #5a1e64 100%);
+    border-radius: var(--radius-lg); padding: var(--space-10) var(--space-8); margin-bottom: var(--space-8);
+    color: white; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+  }
+  .hero::after {
+    content: ''; position: absolute; bottom: -80px; left: 20%;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .hero-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; margin-bottom: var(--space-3); }
+  .hero-title { font-size: 36px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: var(--space-3); line-height: 1.1; }
+  .hero-title span { opacity: 0.5; }
+  .hero-desc { font-size: 14px; opacity: 0.8; line-height: 1.6; max-width: 600px; margin-bottom: var(--space-6); }
+  .hero-actions { display: flex; gap: var(--space-3); flex-wrap: wrap; position: relative; z-index: 1; }
+  .btn-white { background: white; border-color: white; color: var(--brand); }
+  .btn-white:hover { background: var(--neutral-100); }
+  .btn-ghost-white { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3); color: white; }
+  .btn-ghost-white:hover { background: rgba(255,255,255,0.2); }
+
+  /* Color tiles */
+  .color-row { display: flex; gap: 3px; align-items: stretch; margin-bottom: var(--space-3); }
+  .color-label { font-size: 11px; color: var(--text-muted); width: 80px; flex-shrink: 0; display: flex; align-items: center; font-weight: 500; }
+  .color-tile {
+    flex: 1; height: 36px; border-radius: 4px; cursor: pointer; position: relative;
+    transition: transform 0.1s; border: 1px solid rgba(0,0,0,0.06);
+  }
+  .color-tile:hover { transform: scaleY(1.15); z-index: 1; }
+  .color-tile[data-hex]::after {
+    content: attr(data-hex); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+    background: var(--neutral-900); color: white; font-size: 10px; padding: 3px 6px;
+    border-radius: 4px; white-space: nowrap; opacity: 0; transition: opacity 0.1s;
+    pointer-events: none; font-family: var(--mono); margin-bottom: 4px;
+  }
+  .color-tile:hover[data-hex]::after { opacity: 1; }
+
+  /* Typography scale */
+  .type-row {
+    display: flex; align-items: baseline; gap: var(--space-4); padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--neutral-100);
+  }
+  .type-meta { width: 140px; flex-shrink: 0; }
+  .type-name { font-size: 11px; font-weight: 700; font-family: var(--mono); color: var(--brand); }
+  .type-spec { font-size: 11px; color: var(--text-subtle); margin-top: 2px; }
+  .type-sample { font-family: var(--font); }
+
+  /* Spacing rail */
+  .spacing-row { display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-3); }
+  .spacing-block { background: var(--brand-light); border: 1px solid var(--brand-mid); border-radius: 3px; flex-shrink: 0; }
+  .spacing-meta { font-size: 11px; font-family: var(--mono); color: var(--text-muted); }
+  .spacing-val { font-weight: 600; color: var(--text-default); }
+
+  /* Radius demo */
+  .radius-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-3); }
+  .radius-demo {
+    background: var(--brand-light); border: 1.5px solid var(--brand-mid);
+    height: 64px; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-family: var(--mono); color: var(--brand); font-weight: 500;
+  }
+
+  /* Component showcase */
+  .comp-stage {
+    background: var(--neutral-50); border-radius: var(--radius-sm);
+    padding: var(--space-5); margin-top: var(--space-3);
+    border: 1px dashed var(--neutral-200); display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center;
+  }
+
+  /* Input demo */
+  .demo-input {
+    font-family: var(--font); font-size: 13px; padding: 7px 12px;
+    border: 1px solid var(--neutral-200); border-radius: var(--radius-sm);
+    background: var(--neutral-0); color: var(--text-default); outline: none;
+    transition: border-color 0.15s;
+  }
+  .demo-input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(133,50,145,0.1); }
+
+  /* Badge */
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px;
+    border-radius: 100px; font-size: 11px; font-weight: 600;
+  }
+  .badge-brand { background: var(--brand-light); color: var(--brand); }
+  .badge-neutral { background: var(--neutral-100); color: var(--text-muted); }
+  .badge-success { background: #e6f5ee; color: #0f6e56; }
+  .badge-warning { background: #faeeda; color: #854f0b; }
+  .badge-danger { background: #fcebeb; color: #a32d2d; }
+
+  /* AI entry points */
+  .ai-card {
+    background: var(--neutral-900); border-radius: var(--radius); padding: var(--space-5);
+    color: white; position: relative; overflow: hidden;
+  }
+  .ai-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--brand), var(--brand-mid), transparent);
+  }
+  .ai-card-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--brand-mid); margin-bottom: var(--space-3); }
+  .ai-card-title { font-size: 15px; font-weight: 600; margin-bottom: var(--space-2); }
+  .ai-card-desc { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; margin-bottom: var(--space-4); }
+  .ai-code {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-sm); padding: var(--space-3) var(--space-4);
+    font-family: var(--mono); font-size: 12px; color: rgba(255,255,255,0.8);
+    margin-bottom: var(--space-3); cursor: pointer; transition: background 0.15s;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .ai-code:hover { background: rgba(255,255,255,0.1); }
+  .ai-code-copy { font-size: 10px; opacity: 0.5; }
+
+  /* Token table */
+  .token-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .token-table th {
+    text-align: left; padding: 8px 12px; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-subtle);
+    border-bottom: 1px solid var(--neutral-200); background: var(--neutral-50);
+  }
+  .token-table td { padding: 8px 12px; border-bottom: 1px solid var(--neutral-100); vertical-align: middle; }
+  .token-table tr:last-child td { border-bottom: none; }
+  .token-table tr:hover td { background: var(--neutral-50); }
+  .token-key { font-family: var(--mono); color: var(--text-link); font-size: 11px; }
+  .token-swatch { width: 20px; height: 20px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); display: inline-block; vertical-align: middle; margin-right: 8px; }
+
+  /* Copy button feedback */
+  .copied { background: #e6f5ee !important; color: #0f6e56 !important; }
+
+  /* How it works flow */
+  .flow { display: flex; align-items: flex-start; gap: var(--space-3); }
+  .flow-step { display: flex; flex-direction: column; align-items: center; flex: 1; }
+  .flow-num {
+    width: 28px; height: 28px; border-radius: 50%; background: var(--brand); color: white;
+    font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .flow-line { flex: 1; height: 1px; background: var(--neutral-200); margin-top: 14px; }
+  .flow-content { margin-top: var(--space-3); text-align: center; }
+  .flow-title { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+  .flow-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+
+  /* Section divider */
+  .divider { height: 1px; background: var(--neutral-200); margin: var(--space-8) 0; }
+
+  code {
+    font-family: var(--mono); font-size: 11px; background: var(--neutral-100);
+    padding: 2px 6px; border-radius: 4px; color: var(--brand);
+  }
+
+  .pill-row { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+
+  .notice {
+    background: var(--brand-light); border-left: 3px solid var(--brand);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: var(--space-3) var(--space-4); font-size: 12px; color: var(--brand-dark);
+    line-height: 1.6;
+  }
+
+  select.demo-input { cursor: pointer; }
+
+  .tag { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 3px; letter-spacing: 0.04em; }
+  .tag-new { background: var(--brand-light); color: var(--brand); }
+
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 16 16"><path d="M8 2L14 12H2L8 2Z"/></svg>
+    </div>
+    <div>
+      <div class="logo-text">FunDS Lite</div>
+      <div class="logo-sub">Design Manifest v0.1</div>
+    </div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Overview</div>
+    <a class="nav-item active" onclick="scrollTo('intro')">Introduction</a>
+    <a class="nav-item" onclick="scrollTo('ai')">AI Entry Points</a>
+    <a class="nav-item" onclick="scrollTo('how')">How It Works</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Foundations</div>
+    <a class="nav-item" onclick="scrollTo('colors')">Color Scales</a>
+    <a class="nav-item" onclick="scrollTo('typography')">Typography</a>
+    <a class="nav-item" onclick="scrollTo('spacing')">Spacing & Radius</a>
+    <a class="nav-item" onclick="scrollTo('tokens')">Token Reference</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Components</div>
+    <a class="nav-item" onclick="scrollTo('buttons')">Button</a>
+    <a class="nav-item" onclick="scrollTo('inputs')">Input</a>
+    <a class="nav-item" onclick="scrollTo('badges')">Badge & Tag</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">AI Tools</div>
+    <a class="nav-item" onclick="scrollTo('prompts')">System Prompts</a>
+    <a class="nav-item" onclick="scrollTo('llms')">llms.txt Spec</a>
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="topbar-title">FunDS Manifest</span>
+      <span class="topbar-badge">ALPHA</span>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" onclick="copyDesignMD()">⬇ DESIGN.md</button>
+      <button class="btn btn-ghost" onclick="copyPrompt('claude')">Copy Claude Prompt</button>
+      <button class="btn btn-brand" onclick="copyPrompt('cursor')">Copy .cursorrules</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- Hero -->
+    <div class="hero" id="intro">
+      <div class="hero-eyebrow">FunDS Lite — Design System Manifest</div>
+      <div class="hero-title">One URL.<br><span>For humans and AI.</span></div>
+      <div class="hero-desc">
+        A single-page design manifest that PMs, designers, and AI agents (Claude, Cursor) can read to generate design-compliant prototypes without guessing tokens.
+      </div>
+      <div class="hero-actions">
+        <button class="btn btn-white" onclick="copyPrompt('claude')">Copy Prompt for Claude</button>
+        <button class="btn btn-ghost-white" onclick="window.open('/llms.txt')">View llms.txt →</button>
+      </div>
+    </div>
+
+    <!-- AI Entry Points -->
+    <div class="section" id="ai">
+      <div class="section-header">
+        <div class="section-title">AI Entry Points</div>
+        <div class="section-desc">Three ways AI agents can consume the design system in one move.</div>
+      </div>
+      <div class="grid-3">
+        <div class="ai-card">
+          <div class="ai-card-label">Endpoint</div>
+          <div class="ai-card-title">llms.txt</div>
+          <div class="ai-card-desc">Machine-readable markdown spec at a clean URL. One fetch gives an LLM the complete system.</div>
+          <div class="ai-code" onclick="copyText('https://funds-manifest.vercel.app/llms.txt')">
+            /llms.txt <span class="ai-code-copy">click to copy</span>
+          </div>
+          <button class="btn btn-ghost-white" style="font-size:11px; padding:5px 10px;">Open endpoint ↗</button>
+        </div>
+        <div class="ai-card">
+          <div class="ai-card-label">Clipboard</div>
+          <div class="ai-card-title">DESIGN.md</div>
+          <div class="ai-card-desc">Full system rules as a copyable markdown document. Paste into any chat tool instantly.</div>
+          <div class="ai-code" onclick="copyDesignMD()">
+            Click to copy DESIGN.md <span class="ai-code-copy">↓ copy</span>
+          </div>
+          <button class="btn btn-ghost-white" style="font-size:11px; padding:5px 10px;" onclick="copyDesignMD()">Copy to clipboard ↗</button>
+        </div>
+        <div class="ai-card">
+          <div class="ai-card-label">Guardrails</div>
+          <div class="ai-card-title">System Prompts</div>
+          <div class="ai-card-desc">Pre-baked instruction blocks for Claude and Cursor to lock tokens and avoid hallucinated values.</div>
+          <div class="ai-code" onclick="scrollTo('prompts')">
+            3 prompt templates <span class="ai-code-copy">↓ view</span>
+          </div>
+          <button class="btn btn-ghost-white" style="font-size:11px; padding:5px 10px;" onclick="scrollTo('prompts')">View prompts ↗</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="section" id="how">
+      <div class="section-header">
+        <div class="section-title">How It Works</div>
+      </div>
+      <div class="grid-2" style="gap: var(--space-5);">
+        <div class="card">
+          <div class="card-title">For a PM — High Speed</div>
+          <div style="margin-top: var(--space-2);">
+            <div class="flow">
+              <div class="flow-step">
+                <div class="flow-num">1</div>
+                <div class="flow-content"><div class="flow-title">Open Manifest</div><div class="flow-desc">Visit this page</div></div>
+              </div>
+              <div class="flow-line"></div>
+              <div class="flow-step">
+                <div class="flow-num">2</div>
+                <div class="flow-content"><div class="flow-title">Copy Prompt</div><div class="flow-desc">Click "Copy Claude Prompt"</div></div>
+              </div>
+              <div class="flow-line"></div>
+              <div class="flow-step">
+                <div class="flow-num">3</div>
+                <div class="flow-content"><div class="flow-title">Paste & Build</div><div class="flow-desc">Claude reads manifest, outputs compliant code</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">For a Designer — Local Iteration</div>
+          <div style="margin-top: var(--space-2);">
+            <div class="flow">
+              <div class="flow-step">
+                <div class="flow-num">1</div>
+                <div class="flow-content"><div class="flow-title">Open Cursor</div><div class="flow-desc">In a new project</div></div>
+              </div>
+              <div class="flow-line"></div>
+              <div class="flow-step">
+                <div class="flow-num">2</div>
+                <div class="flow-content"><div class="flow-title">Copy .cursorrules</div><div class="flow-desc">From this manifest</div></div>
+              </div>
+              <div class="flow-line"></div>
+              <div class="flow-step">
+                <div class="flow-num">3</div>
+                <div class="flow-content"><div class="flow-title">AI Knows Tokens</div><div class="flow-desc">No arbitrary values hallucinated</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Color Scales -->
+    <div class="section" id="colors">
+      <div class="section-header">
+        <div class="section-title">Color Scales</div>
+        <div class="section-desc">10 scales. P3 colors on supported displays. Hover tile to see hex. Click to copy.</div>
+      </div>
+      <div class="card">
+        <div id="colorScales"></div>
+      </div>
+    </div>
+
+    <!-- Typography -->
+    <div class="section" id="typography">
+      <div class="section-header">
+        <div class="section-title">Typography</div>
+        <div class="section-desc">Inter at weights 500 and 700. Semantic scale from 72px marketing heroes down to 12px labels.</div>
+      </div>
+      <div class="card">
+        <div class="type-row" style="border-top: 1px solid var(--neutral-100);">
+          <div class="type-meta"><div class="type-name">text-heading-72</div><div class="type-spec">72px / 700 / −0.03em</div></div>
+          <div class="type-sample" style="font-size:42px; font-weight:700; letter-spacing:-0.03em; line-height:1;">Heading 72</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta"><div class="type-name">text-heading-48</div><div class="type-spec">48px / 700 / −0.02em</div></div>
+          <div class="type-sample" style="font-size:32px; font-weight:700; letter-spacing:-0.02em; line-height:1.1;">Heading 48</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta"><div class="type-name">text-heading-32</div><div class="type-spec">32px / 700 / −0.01em</div></div>
+          <div class="type-sample" style="font-size:24px; font-weight:700; letter-spacing:-0.01em;">Heading 32</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta"><div class="type-name">text-heading-24</div><div class="type-spec">24px / 600 / 0</div></div>
+          <div class="type-sample" style="font-size:20px; font-weight:600;">Heading 24</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta"><div class="type-name">text-body-18</div><div class="type-spec">18px / 400 / 0</div></div>
+          <div class="type-sample" style="font-size:18px; font-weight:400; color: var(--text-muted);">Body text at 18px. The primary reading size for dashboards and paragraphs.</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta"><div class="type-name">text-body-14</div><div class="type-spec">14px / 400 / 0</div></div>
+          <div class="type-sample" style="font-size:14px; font-weight:400; color: var(--text-muted);">Compact body text at 14px. Used in data tables and secondary descriptions.</div>
+        </div>
+        <div class="type-row" style="border-bottom: none;">
+          <div class="type-meta"><div class="type-name">text-label-12</div><div class="type-spec">12px / 500 / +0.04em</div></div>
+          <div class="type-sample" style="font-size:12px; font-weight:500; letter-spacing:0.04em; color: var(--text-subtle); text-transform: uppercase;">LABEL / CAPTION TEXT</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spacing & Radius -->
+    <div class="section" id="spacing">
+      <div class="section-header">
+        <div class="section-title">Spacing & Radius</div>
+        <div class="section-desc">4px base rhythm. 12px primary radius across interactive elements.</div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Spacing Scale — 4px rhythm</div>
+          <div id="spacingScale" style="margin-top: var(--space-3);"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Border Radius — 0 to 40px</div>
+          <div class="radius-grid" style="margin-top: var(--space-3);" id="radiusGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Token Reference -->
+    <div class="section" id="tokens">
+      <div class="section-header">
+        <div class="section-title">Token Reference</div>
+        <div class="section-desc">Consolidated design tokens. Copy the class or hex — both are valid.</div>
+      </div>
+      <div class="card" style="padding: 0; overflow: hidden;">
+        <table class="token-table">
+          <thead>
+            <tr><th>Category</th><th>Token</th><th>Value</th><th>Usage</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Brand</td><td class="token-key">primary-500</td><td><span class="token-swatch" style="background:#853291;"></span>#853291</td><td>CTAs, links, active states</td></tr>
+            <tr><td>Brand</td><td class="token-key">primary-600</td><td><span class="token-swatch" style="background:#6b2376;"></span>#6b2376</td><td>Hover state for primary</td></tr>
+            <tr><td>Brand</td><td class="token-key">primary-50</td><td><span class="token-swatch" style="background:#f5eaf6;"></span>#f5eaf6</td><td>Tints, backgrounds</td></tr>
+            <tr><td>Semantic</td><td class="token-key">text-default</td><td>#111928</td><td>Primary readable text</td></tr>
+            <tr><td>Semantic</td><td class="token-key">text-link</td><td>#853291</td><td>Clickable links</td></tr>
+            <tr><td>Semantic</td><td class="token-key">text-muted</td><td>#5f5e5a</td><td>Secondary / supporting</td></tr>
+            <tr><td>Typography</td><td class="token-key">font-family</td><td>Inter</td><td>All text elements</td></tr>
+            <tr><td>Typography</td><td class="token-key">font-weight</td><td>500, 700</td><td>Medium and Bold only</td></tr>
+            <tr><td>Spacing</td><td class="token-key">spacing-base</td><td>4px</td><td>Rhythm unit</td></tr>
+            <tr><td>Spacing</td><td class="token-key">spacing-scale</td><td>0,4,8,12,16,20,24,32,40,48</td><td>All spacing values</td></tr>
+            <tr><td>Radius</td><td class="token-key">radius-primary</td><td>12px</td><td>Cards, inputs, buttons</td></tr>
+            <tr><td>Radius</td><td class="token-key">radius-range</td><td>0–40px</td><td>Full range available</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Components -->
+    <div class="section" id="buttons">
+      <div class="section-header">
+        <div class="section-title">Button</div>
+        <div class="section-desc">Trigger an action or event. Three variants × three sizes.</div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Variants</div>
+          <div class="comp-stage">
+            <button class="btn btn-brand">Primary</button>
+            <button class="btn btn-outline">Secondary</button>
+            <button class="btn btn-ghost">Ghost</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Sizes</div>
+          <div class="comp-stage">
+            <button class="btn btn-brand" style="padding: 5px 10px; font-size: 11px; border-radius: 6px;">Small</button>
+            <button class="btn btn-brand">Default</button>
+            <button class="btn btn-brand" style="padding: 10px 20px; font-size: 14px; border-radius: 10px;">Large</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Destructive & Disabled</div>
+          <div class="comp-stage">
+            <button class="btn" style="background:#fcebeb; border-color:#f09595; color:#a32d2d;">Delete</button>
+            <button class="btn btn-brand" disabled style="opacity:0.4; cursor:not-allowed;">Disabled</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">With Icon</div>
+          <div class="comp-stage">
+            <button class="btn btn-brand">⬆ Upload</button>
+            <button class="btn btn-outline">+ New Fund</button>
+            <button class="btn btn-ghost">← Back</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="inputs">
+      <div class="section-header">
+        <div class="section-title">Input</div>
+        <div class="section-desc">Retrieve text from a user. Supports prefix, suffix, and validation states.</div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Default Sizes</div>
+          <div class="comp-stage" style="flex-direction: column; align-items: stretch;">
+            <input class="demo-input" style="width:100%; font-size:12px; padding: 5px 10px;" placeholder="Small input" />
+            <input class="demo-input" style="width:100%;" placeholder="Default input" />
+            <input class="demo-input" style="width:100%; font-size:15px; padding: 10px 14px;" placeholder="Large input" />
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Prefix & Suffix</div>
+          <div class="comp-stage" style="flex-direction: column; align-items: stretch; gap: var(--space-2);">
+            <div style="display:flex; border: 1px solid var(--neutral-200); border-radius: var(--radius-sm); overflow:hidden;">
+              <span style="padding: 7px 10px; background: var(--neutral-100); font-size:13px; color: var(--text-muted); border-right: 1px solid var(--neutral-200);">$</span>
+              <input class="demo-input" style="border:none; border-radius:0; flex:1;" placeholder="0.00" />
+            </div>
+            <div style="display:flex; border: 1px solid var(--neutral-200); border-radius: var(--radius-sm); overflow:hidden;">
+              <input class="demo-input" style="border:none; border-radius:0; flex:1;" placeholder="fund-name" />
+              <span style="padding: 7px 10px; background: var(--neutral-100); font-size:13px; color: var(--text-muted); border-left: 1px solid var(--neutral-200);">.vercel.app</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Validation States</div>
+          <div class="comp-stage" style="flex-direction: column; align-items: stretch; gap: var(--space-2);">
+            <input class="demo-input" style="width:100%; border-color: #0f6e56;" placeholder="Valid input" value="investments@fund.com" />
+            <input class="demo-input" style="width:100%; border-color: #a32d2d; box-shadow: 0 0 0 3px rgba(163,45,45,0.1);" placeholder="Error input" value="invalid@" />
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Select & Textarea</div>
+          <div class="comp-stage" style="flex-direction: column; align-items: stretch; gap: var(--space-2);">
+            <select class="demo-input" style="width:100%;">
+              <option>Equity Fund</option>
+              <option>Debt Fund</option>
+              <option>Real Estate Fund</option>
+            </select>
+            <textarea class="demo-input" style="width:100%; resize:vertical; min-height:60px;" placeholder="Fund description…"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="badges">
+      <div class="section-header">
+        <div class="section-title">Badge & Tag</div>
+        <div class="section-desc">Status indicators and categorical labels.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Semantic Badges</div>
+        <div class="comp-stage">
+          <span class="badge badge-brand">Active</span>
+          <span class="badge badge-success">Funded</span>
+          <span class="badge badge-warning">Pending</span>
+          <span class="badge badge-danger">Overdue</span>
+          <span class="badge badge-neutral">Archived</span>
+        </div>
+        <div class="card-title" style="margin-top: var(--space-4);">Size Variants</div>
+        <div class="comp-stage">
+          <span class="badge badge-brand" style="font-size:10px; padding: 2px 6px;">XS Active</span>
+          <span class="badge badge-brand">SM Active</span>
+          <span class="badge badge-brand" style="font-size:13px; padding: 5px 12px;">MD Active</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- System Prompts -->
+    <div class="section" id="prompts">
+      <div class="section-header">
+        <div class="section-title">System Prompts</div>
+        <div class="section-desc">Pre-baked instruction blocks. Copy and paste into Claude or Cursor to enforce guardrails.</div>
+      </div>
+      <div class="grid-2">
+        <div class="ai-card">
+          <div class="ai-card-label">For Claude.ai</div>
+          <div class="ai-card-title">Claude System Prompt</div>
+          <div class="ai-card-desc">Paste before your task to enforce FunDS Lite compliance in generated code.</div>
+          <div class="ai-code" id="claudePromptBox" onclick="copyPrompt('claude')" style="font-size:11px; line-height:1.6;">
+            You are building a UI using the FunDS Lite design system...<br>
+            <span class="ai-code-copy">click to copy full prompt</span>
+          </div>
+        </div>
+        <div class="ai-card">
+          <div class="ai-card-label">For Cursor</div>
+          <div class="ai-card-title">.cursorrules</div>
+          <div class="ai-card-desc">Drop this into your project root. Cursor will enforce tokens on every generation.</div>
+          <div class="ai-code" id="cursorPromptBox" onclick="copyPrompt('cursor')" style="font-size:11px; line-height:1.6;">
+            # FunDS Lite — Cursor Rules<br>
+            Only use colors from the defined token set...<br>
+            <span class="ai-code-copy">click to copy full prompt</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- llms.txt -->
+    <div class="section" id="llms">
+      <div class="section-header">
+        <div class="section-title">llms.txt Specification</div>
+        <div class="section-desc">The full manifest is available as clean markdown at <code>/llms.txt</code>. No HTML, no scripts — just spec.</div>
+      </div>
+      <div class="notice">
+        <strong>AI Agents:</strong> Fetch <code>https://funds-manifest.vercel.app/llms.txt</code> to get the full design system spec in one request. The file includes all color tokens, spacing, typography rules, component usage guidelines, and do/don't examples.
+      </div>
+      <div class="card" style="margin-top: var(--space-4);">
+        <div class="card-title">What llms.txt contains</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--space-3); margin-top: var(--space-3);">
+          <div style="padding: var(--space-3); background: var(--neutral-50); border-radius: var(--radius-sm); border: 1px solid var(--neutral-200);">
+            <div style="font-size:11px; font-weight:700; margin-bottom:4px;">Color Tokens</div>
+            <div style="font-size:11px; color:var(--text-muted);">All hex values with semantic meaning</div>
+          </div>
+          <div style="padding: var(--space-3); background: var(--neutral-50); border-radius: var(--radius-sm); border: 1px solid var(--neutral-200);">
+            <div style="font-size:11px; font-weight:700; margin-bottom:4px;">Typography Rules</div>
+            <div style="font-size:11px; color:var(--text-muted);">Font, weights, size scale</div>
+          </div>
+          <div style="padding: var(--space-3); background: var(--neutral-50); border-radius: var(--radius-sm); border: 1px solid var(--neutral-200);">
+            <div style="font-size:11px; font-weight:700; margin-bottom:4px;">Spacing System</div>
+            <div style="font-size:11px; color:var(--text-muted);">4px rhythm, all valid values</div>
+          </div>
+          <div style="padding: var(--space-3); background: var(--neutral-50); border-radius: var(--radius-sm); border: 1px solid var(--neutral-200);">
+            <div style="font-size:11px; font-weight:700; margin-bottom:4px;">Component API</div>
+            <div style="font-size:11px; color:var(--text-muted);">Props, variants, and usage</div>
+          </div>
+          <div style="padding: var(--space-3); background: var(--neutral-50); border-radius: var(--radius-sm); border: 1px solid var(--neutral-200);">
+            <div style="font-size:11px; font-weight:700; margin-bottom:4px;">Do / Don't</div>
+            <div style="font-size:11px; color:var(--text-muted);">Guardrails for AI generation</div>
+          </div>
+          <div style="padding: var(--space-3); background: var(--neutral-50); border-radius: var(--radius-sm); border: 1px solid var(--neutral-200);">
+            <div style="font-size:11px; font-weight:700; margin-bottom:4px;">Example Prompts</div>
+            <div style="font-size:11px; color:var(--text-muted);">Starter prompts for common UIs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<script>
+// Color scales data
+const scales = {
+  'Backgrounds': ['#ffffff','#f9f9f8'],
+  'Gray':        ['#f9f9f8','#f1f0ec','#e4e3de','#c9c8c2','#9c9b95','#7a7975','#5f5e5a','#444441','#2c2c2a','#111110'],
+  'Gray Alpha':  ['rgba(0,0,0,0.02)','rgba(0,0,0,0.04)','rgba(0,0,0,0.06)','rgba(0,0,0,0.1)','rgba(0,0,0,0.18)','rgba(0,0,0,0.28)','rgba(0,0,0,0.42)','rgba(0,0,0,0.60)','rgba(0,0,0,0.78)','rgba(0,0,0,0.92)'],
+  'Brand':       ['#f5eaf6','#ead5ed','#d9b4de','#c77ecf','#b44dbf','#9a2daa','#853291','#6b2376','#50185b','#360d3d'],
+  'Blue':        ['#e6f1fb','#cce3f7','#99c7ef','#60a8e6','#2a88db','#1166b5','#0d4e90','#093a6c','#062748','#031525'],
+  'Red':         ['#fcebeb','#f9d5d5','#f3aaaa','#ea7676','#de4444','#bf2a2a','#9e2020','#7c1818','#5b1111','#3a0b0b'],
+  'Amber':       ['#faeeda','#f7ddb0','#f0bc64','#e09b27','#c07c15','#9c600d','#7a4a09','#5c3707','#3e2605','#261703'],
+  'Green':       ['#e6f5ee','#c4e8d5','#89d2ab','#4dbb7e','#23a05a','#138445','#0c6736','#084d28','#05341b','#031f10'],
+};
+
+const colorContainer = document.getElementById('colorScales');
+Object.entries(scales).forEach(([name, colors]) => {
+  const row = document.createElement('div');
+  row.className = 'color-row';
+  row.innerHTML = `<span class="color-label">${name}</span>`;
+  colors.forEach(hex => {
+    const tile = document.createElement('div');
+    tile.className = 'color-tile';
+    tile.style.background = hex;
+    tile.setAttribute('data-hex', hex.startsWith('#') ? hex : '');
+    tile.title = hex;
+    tile.onclick = () => { navigator.clipboard.writeText(hex); showCopied(tile); };
+    row.appendChild(tile);
+  });
+  colorContainer.appendChild(row);
+});
+
+// Spacing
+const spacingScale = document.getElementById('spacingScale');
+[0,4,8,12,16,20,24,32,40,48].forEach(val => {
+  const row = document.createElement('div');
+  row.className = 'spacing-row';
+  row.innerHTML = `
+    <div class="spacing-block" style="width:${Math.max(val,2)}px; height:${Math.max(val,2)}px;"></div>
+    <span class="spacing-meta"><span class="spacing-val">${val}px</span> — space-${val}</span>
+  `;
+  spacingScale.appendChild(row);
+});
+
+// Radius
+const radiusGrid = document.getElementById('radiusGrid');
+[0,4,6,8,12,16,20,24,32,40].forEach(val => {
+  const div = document.createElement('div');
+  div.className = 'radius-demo';
+  div.style.borderRadius = val + 'px';
+  div.textContent = val + 'px';
+  radiusGrid.appendChild(div);
+});
+
+// Scroll
+function scrollTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showCopied(el) {
+  const orig = el.style.outline;
+  el.style.outline = '2px solid #853291';
+  setTimeout(() => el.style.outline = orig, 800);
+}
+
+const CLAUDE_PROMPT = `You are building a UI using the FunDS Lite design system.
+
+STRICT RULES — do not deviate:
+- Primary brand color: #853291 (never use purple from generic palettes)
+- Font: Inter only, weights 500 and 700 only
+- Spacing: 4px rhythm — only use: 0, 4, 8, 12, 16, 20, 24, 32, 40, 48px
+- Border radius primary: 12px (range: 0-40px)
+- Text default: #111928 | Text link: #853291 | Text muted: #5f5e5a
+- Use Tailwind utility classes mapped to these tokens
+- Do not hallucinate arbitrary hex values or spacing values
+- Do not use font-weight values other than 500 and 700
+
+Refer to the manifest at: https://funds-manifest.vercel.app/llms.txt for full spec.`;
+
+const CURSOR_RULES = `# FunDS Lite — .cursorrules
+
+## Color Tokens (LOCKED — do not use any other values)
+primary: #853291
+primary-dark: #6b2376
+primary-light: #f5eaf6
+text-default: #111928
+text-link: #853291
+text-muted: #5f5e5a
+text-subtle: #9c9b95
+
+## Typography
+font: Inter
+weights: 500 (medium), 700 (bold) ONLY
+Do not use font-weight 400, 600, or 800
+
+## Spacing — 4px rhythm
+Valid values: 0, 4, 8, 12, 16, 20, 24, 32, 40, 48
+Never use: 5, 10, 15, 25, 30, or any non-multiple of 4
+
+## Radius
+primary: 12px
+range: 0-40px (multiples of 4)
+
+## Guardrails
+- Never use arbitrary Tailwind values like p-[13px]
+- Never use hex values not in this token set
+- Never use Google Fonts other than Inter
+- Reference: https://funds-manifest.vercel.app/llms.txt`;
+
+const DESIGN_MD = `# FunDS Lite — DESIGN.md
+## Design System Specification
+
+### Brand
+- Primary: #853291
+- Primary Dark (hover): #6b2376
+- Primary Light (tint): #f5eaf6
+
+### Typography
+- Font Family: Inter
+- Weights: 500 (medium), 700 (bold)
+- Scale: 72, 48, 32, 24, 18, 14, 12px
+- Letter spacing: -0.03em (large headings) to +0.04em (labels)
+
+### Color Semantic
+- Text Default: #111928
+- Text Link: #853291
+- Text Muted: #5f5e5a
+- Text Subtle: #9c9b95
+
+### Spacing (4px rhythm)
+0, 4, 8, 12, 16, 20, 24, 32, 40, 48px
+
+### Border Radius
+- Primary: 12px
+- Small: 6px
+- Large: 20px
+- Range: 0–40px
+
+### Component Variants
+**Button**: brand (filled), outline, ghost
+**Input**: default, prefix/suffix, validation states
+**Badge**: brand, success, warning, danger, neutral
+
+### AI Guardrails
+- Only use hex values from this spec
+- Only use Inter at weight 500 or 700
+- Only use spacing values from the 4px scale
+- Primary radius is 12px — do not use 8px or 16px as primary
+`;
+
+function copyPrompt(type) {
+  const text = type === 'claude' ? CLAUDE_PROMPT : CURSOR_RULES;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector(type === 'claude' ? '.btn-ghost' : '.btn-brand');
+    if (btn) {
+      const orig = btn.textContent;
+      btn.textContent = '✓ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 1500);
+    }
+  });
+}
+
+function copyDesignMD() {
+  navigator.clipboard.writeText(DESIGN_MD).then(() => {
+    const btns = document.querySelectorAll('.btn-ghost');
+    const btn = btns[0];
+    if (btn) {
+      const orig = btn.textContent;
+      btn.textContent = '✓ Copied!';
+      setTimeout(() => btn.textContent = orig, 1500);
+    }
+  });
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => alert('Copied: ' + text));
+}
+
+// Active nav on scroll
+const sections = ['intro','ai','how','colors','typography','spacing','tokens','buttons','inputs','badges','prompts','llms'];
+const navItems = document.querySelectorAll('.nav-item');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 100) current = id;
+  });
+  navItems.forEach(item => {
+    item.classList.toggle('active', item.getAttribute('onclick')?.includes(current));
+  });
+}, { passive: true });
+</script>
+</body>
+</html>

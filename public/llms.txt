@@ -1,0 +1,251 @@
+# FunDS Lite — Design System Specification
+# Version: 1.0.0 | Updated: 2026-04
+# Fetch this file to get the complete system spec in one request.
+# Human manifest: https://funds-manifest.vercel.app
+
+---
+
+## OVERVIEW
+
+FunDS Lite is the public-facing slice of the Amartha FunDS design system.
+It covers just enough tokens, components, and patterns to keep the mobile app
+and internal dashboard in sync.
+
+Surfaces: Mobile (primary), Internal Dashboard
+
+---
+
+## COLOR TOKENS
+
+### Brand (Primary Purple)
+primary-50:  #FEF3FF  — tinted backgrounds, badge fills
+primary-200: #E5B8EF  — hover backgrounds
+primary-300: #D68EE4  — illustrative / decorative
+primary-400: #A642B7  — secondary actions
+primary-500: #853291  — PRIMARY — buttons, links, active states
+primary-600: #732C7C  — hover / pressed state for primary
+primary-700: #612966  — on-light text emphasis
+primary-900: #3D1042  — deep emphasis
+
+### Neutral
+neutral-white: #FFFFFF  — surface / card backgrounds
+neutral-50:    #F9FAF8  — page background
+neutral-200:   #E5E7EB  — borders (default)
+neutral-400:   #C6CAD0  — placeholder text
+neutral-500:   #8E95A3  — disabled state
+neutral-600:   #6B7280  — caption / secondary text
+neutral-700:   #525C6A  — secondary text emphasis
+neutral-900:   #111928  — default text (darkest)
+
+### Saturated — Status Colors
+blue-50:    #EDF7FF  | blue-500:   #056DCE  — informational
+green-50:   #E4FCEF  | green-500:  #009C6A  — success / funded
+orange-50:  #FDF4E9  | orange-500: #F7941D  — warning / pending
+red-50:     #FFF4F3  | red-500:    #D73630  — error / overdue / danger
+yellow-50:  #FFFED9  | yellow-500: #EAB20B  — accent / review
+
+---
+
+## SEMANTIC TOKEN ALIASES
+
+Use these aliases in components — prefer over raw color names.
+
+text-default:     #111928  (neutral-900) — primary readable text
+text-caption:     #6B7280  (neutral-600) — secondary / supporting text
+text-disabled:    #8E95A3  (neutral-500) — disabled labels
+text-placeholder: #C6CAD0  (neutral-400) — input placeholder text
+text-link:        #853291  (primary-500) — clickable links
+
+border-default:   #E5E7EB  (neutral-200) — card and input borders
+border-light:     #F9FAF8  (neutral-50)  — subtle dividers
+
+bg-overlay:       rgba(17, 25, 40, 0.8)  — modal/drawer overlays
+
+---
+
+## TYPOGRAPHY
+
+Font Family: Inter (Google Fonts)
+Weights: 500 (regular), 700 (bold) — NO OTHER WEIGHTS PERMITTED
+
+### Type Scale
+text-24: 24px / weight 700 / letter-spacing -0.02em  → Heading 24
+text-20: 20px / weight 700 / letter-spacing -0.01em  → Heading 20
+text-18: 18px / weight 500 / letter-spacing 0        → Body 18 (primary reading)
+text-16: 16px / weight 500 / letter-spacing 0        → Body 16 (secondary)
+text-14: 14px / weight 500 / letter-spacing 0        → Body 14 (tables, compact)
+text-12: 12px / weight 500 / letter-spacing +0.04em  → Label / Caption (UPPERCASE)
+text-10: 10px / weight 500 / letter-spacing +0.06em  → Overline / Micro (UPPERCASE)
+
+---
+
+## SPACING
+
+Base rhythm: 4px
+Tailwind classes use numeric suffix = pixel value.
+
+space-0:  0px   (p-0,  m-0)
+space-2:  2px   (p-2,  m-2)
+space-4:  4px   (p-4,  m-4)
+space-8:  8px   (p-8,  m-8)
+space-12: 12px  (p-12, m-12)
+space-16: 16px  (p-16, m-16)
+space-20: 20px  (p-20, m-20)
+space-24: 24px  (p-24, m-24)
+space-32: 32px  (p-32, m-32)
+space-40: 40px  (p-40, m-40)
+space-48: 48px  (p-48, m-48)
+
+FORBIDDEN: 5, 6, 10, 15, 25, 30px — never use values not in the scale above.
+
+---
+
+## BORDER RADIUS
+
+rounded-none: 0px    — sharp corners
+rounded-2:    2px    — micro
+rounded-4:    4px    — subtle
+rounded-6:    6px    — small (sm) — chips, tags
+rounded-8:    8px    — DEFAULT — buttons, inputs
+rounded-12:   12px   — cards, modals
+rounded-16:   16px   — large containers
+rounded-20:   20px   — XL panels
+rounded-24:   24px   — hero sections
+rounded-32:   32px   — decorative
+rounded-40:   40px   — pill-like large
+rounded-full: 9999px — pill / circular
+
+Primary radius for interactive elements: 8px
+Card radius: 12px
+Small element radius: 6px
+
+---
+
+## COMPONENTS
+
+### Button
+Shape:    pill (border-radius 9999px)
+Variants: primary | secondary | outline (tertiary) | ghost | danger
+Sizes:    xs (12px) | sm (12px) | default (14px) | lg (16px) | xl (16px)
+States:   default | hover | active | focus-visible | disabled
+Font:     weight 700
+
+Token map:
+- primary:    bg #853291 (gradient overlay), hover bg #732C7C, text white
+              box-shadow: 0 0 0 1px #732C7C, 0 2px 3px rgba(133,50,145,0.3)
+- secondary:  bg white, border #853291, text #853291, hover tint bg
+- outline:    bg white, border #E5E7EB, text #111928, hover border #C6CAD0
+- ghost:      bg transparent, border transparent, text #853291, hover bg #FEF3FF
+- danger:     bg #D73630, border #D73630, text white, hover bg #AC2B26
+
+Disabled: neutral-200 bg, neutral-500 text, cursor not-allowed, no shadow
+Focus ring: 2px white + 4px #E5B8EF (primary-200)
+Class naming: ds-btn ds-btn-{variant} [ds-btn-xs|sm|lg|xl]
+
+### Input
+Radius: 8px | Border: #E5E7EB | Focus ring: #FEF3FF (3px) + border #853291
+States: default | focus | valid (border #009C6A) | error (border #D73630)
+Supports: prefix element (left adornment) | suffix element (right adornment)
+Variants: text input | select | textarea
+
+### Badge
+Shape: pill (border-radius 9999px) | Padding: 3px 10px | Font: 12px/500
+Variants:
+- primary: bg #FEF3FF, text #732C7C
+- blue:    bg #EDF7FF, text #0457A5
+- green:   bg #E4FCEF, text #007D55
+- orange:  bg #FDF4E9, text #AD540A
+- red:     bg #FFF4F3, text #AC2B26
+- yellow:  bg #FFFED9, text #996F03
+- neutral: bg #F9FAF8, text #6B7280, border #E5E7EB
+
+### Card
+Radius: 12px | Border: 1px solid #E5E7EB | Background: #FFFFFF | Padding: 20px
+
+---
+
+## TAILWIND CONFIG REFERENCE
+
+The locked Tailwind config is the single source of truth for utility classes.
+Only generate classes derivable from this config — never use arbitrary values.
+
+colors.primary.500 = #853291
+colors.neutral.900 = #111928
+fontFamily.sans    = Inter
+fontWeight.regular = 500
+fontWeight.bold    = 700
+spacing.*          = see spacing table above
+borderRadius.*     = see radius table above
+
+---
+
+## DO / DON'T GUARDRAILS
+
+DO:
+✓ Use primary-500 (#853291) for all primary actions
+✓ Use Inter at weight 500 or 700 only
+✓ Use spacing values from the defined scale (0,2,4,8,12,16,20,24,32,40,48)
+✓ Use semantic token names (text-default, border-default) over raw colors
+✓ Use rounded-8 for buttons/inputs, rounded-12 for cards
+✓ Pair status colors with their 50-tint background (e.g. red-500 on red-50 bg)
+
+DON'T:
+✗ Never use arbitrary Tailwind values like w-[437px] or text-[#abc]
+✗ Never invent hex values not in this token set
+✗ Never use font-weight 400, 600, or 800
+✗ Never use spacing values not in the defined scale (e.g. 5px, 10px, 15px)
+✗ Never use Google Fonts other than Inter
+✗ Never use purple colors from generic palettes — only primary-* tokens
+
+---
+
+## STARTER PROMPTS
+
+### Build a fund dashboard card:
+"Using FunDS Lite tokens, build a React card component showing fund name,
+AUM, IRR, and status badge. Use rounded-12, border-default, and p-20."
+
+### Build a data table:
+"Using FunDS Lite, build a table with text-14 body, neutral-200 borders,
+neutral-50 header background, and status badges for fund state."
+
+### Build a form:
+"Using FunDS Lite inputs with rounded-8, border-default, and primary-500
+focus ring. Include a $ prefix input for amount and a select for fund type."
+
+---
+
+## AMARTHA PRODUCT CONTEXT
+
+Amartha Financial (https://amartha.com/) is a micro-finance lending company focused on
+productive micro loans for grassroot women in Indonesia.
+
+### Product Suite
+
+Productive Loan:
+- Modal         — Digital loan product (primary borrower product)
+- Group Loan    — Non-digital group loan (deprecated; migrating to Modal)
+
+Funding / Investment:
+- B2B Funding   — Institutional funding (not available in AmarthaFin App)
+- Celengan      — Retail investment, primarily for grassroot market
+- GGS (Grassroot Growth Series) — Retail investment for middle-upper class investors
+
+PPOB (Payment Point Online Bank):
+- PPOB          — B2C bill payment features
+- AmarthaLink   — Agent-based PPOB feature
+
+Wallet:
+- Poket         — In-app wallet for transactions within the Amartha ecosystem
+
+### Platforms
+
+- AmarthaFin App  — Consumer-facing mobile app (iOS & Android).
+                    Primary platform for borrowers, investors, and PPOB users.
+- NG-MIS          — Internal Management Information System for Amartha ops/staff.
+                    Potentially evolving into a CRM.
+- A-Partner App   — Internal app for field partners/agents.
+
+---
+
+*End of FunDS Lite spec. Fetch https://funds-manifest.vercel.app for the visual manifest.*
