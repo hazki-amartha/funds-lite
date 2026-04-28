@@ -74,7 +74,7 @@ text-20: 20px / weight 700 / letter-spacing -0.01em  → Heading 20
 text-18: 18px / weight 500 / letter-spacing 0        → Body 18 (primary reading)
 text-16: 16px / weight 500 / letter-spacing 0        → Body 16 (secondary)
 text-14: 14px / weight 500 / letter-spacing 0        → Body 14 (tables, compact)
-text-12: 12px / weight 500 / letter-spacing +0.04em  → Label / Caption (UPPERCASE)
+text-12: 12px / weight 500 / letter-spacing 0        → Body 12 / Caption
 text-10: 10px / weight 500 / letter-spacing +0.06em  → Overline / Micro (UPPERCASE)
 
 ---
@@ -97,6 +97,23 @@ space-40: 40px  (p-40, m-40)
 space-48: 48px  (p-48, m-48)
 
 FORBIDDEN: 5, 6, 10, 15, 25, 30px — never use values not in the scale above.
+
+---
+
+## LAYOUT PATTERNS
+
+### Mobile Screen
+page-padding-x:   16px  — horizontal edge margin for all screen content
+page-padding-top: 16px  — below topbar
+section-gap:      12px  — vertical gap between cards/sections
+
+### Card
+card-padding:     12px  — internal card padding (not 20px)
+card-gap:         8px   — gap between cards
+
+### Topbar
+topbar-height:    48px
+topbar-padding-x: 16px
 
 ---
 
@@ -144,9 +161,13 @@ Class naming: ds-btn ds-btn-{variant} [ds-btn-xs|sm|lg|xl]
 
 ### Input
 Radius: 8px | Border: #E5E7EB | Focus ring: #FEF3FF (3px) + border #853291
-States: default | focus | valid (border #009C6A) | error (border #D73630)
-Supports: prefix element (left adornment) | suffix element (right adornment)
-Variants: text input | select | textarea
+Sizes: small | medium | large
+States: default | hover | typing | error while typing | error default | disabled
+Conditions: empty | filled
+Additional info: label | required | optional | helper | description | all combined
+Supports: prefix element (clickable or static) | suffix element (clickable or static)
+Icons: left icon | right icon when meaningful or actionable
+Variants: text input | select | textarea | tap area
 
 ### Badge
 Shape: pill (border-radius 9999px) | Padding: 3px 10px | Font: 12px/500
@@ -160,7 +181,7 @@ Variants:
 - neutral: bg #F9FAF8, text #6B7280, border #E5E7EB
 
 ### Card
-Radius: 12px | Border: 1px solid #E5E7EB | Background: #FFFFFF | Padding: 20px
+Radius: 12px | Border: 1px solid #E5E7EB | Background: #FFFFFF | Padding: 12px
 
 ---
 
@@ -185,6 +206,7 @@ DO:
 ✓ Use primary-500 (#853291) for all primary actions
 ✓ Use Inter at weight 500 or 700 only
 ✓ Use spacing values from the defined scale (0,2,4,8,12,16,20,24,32,40,48)
+✓ Use the mobile layout guide: 16px page padding, 12px section gaps, 12px card padding, 8px card gaps, 48px topbar height
 ✓ Use semantic token names (text-default, border-default) over raw colors
 ✓ Use rounded-8 for buttons/inputs, rounded-12 for cards
 ✓ Pair status colors with their 50-tint background (e.g. red-500 on red-50 bg)
@@ -196,6 +218,7 @@ DON'T:
 ✗ Never use spacing values not in the defined scale (e.g. 5px, 10px, 15px)
 ✗ Never use Google Fonts other than Inter
 ✗ Never use purple colors from generic palettes — only primary-* tokens
+✗ Never use emoji in the design
 
 ---
 
@@ -203,7 +226,7 @@ DON'T:
 
 ### Build a fund dashboard card:
 "Using FunDS Lite tokens, build a React card component showing fund name,
-AUM, IRR, and status badge. Use rounded-12, border-default, and p-20."
+AUM, IRR, and status badge. Use rounded-12, border-default, and p-12."
 
 ### Build a data table:
 "Using FunDS Lite, build a table with text-14 body, neutral-200 borders,

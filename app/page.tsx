@@ -1,17 +1,75 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, type ReactNode } from 'react'
 
 // ── Design token data (source: tailwind.config.ts) ──────────────────────────
 
-const COLOR_SCALES: Record<string, string[]> = {
-  Brand: ['#FEF3FF', '#E5B8EF', '#D68EE4', '#A642B7', '#853291', '#732C7C', '#612966', '#3D1042'],
-  Neutral: ['#FFFFFF', '#F9FAF8', '#E5E7EB', '#C6CAD0', '#8E95A3', '#6B7280', '#525C6A', '#111928'],
-  Blue: ['#EDF7FF', '#BCE0F7', '#70B7E5', '#056DCE', '#0457A5', '#03417C', '#022C52'],
-  Green: ['#E4FCEF', '#A2EDC3', '#4BDB98', '#009C6A', '#007D55', '#005E40', '#003E2A'],
-  Orange: ['#FDF4E9', '#FCDDAB', '#FABF77', '#F7941D', '#E0771B', '#AD540A', '#70320D'],
-  Red: ['#FFF4F3', '#FFD9D6', '#F3726D', '#D73630', '#AC2B26', '#81201D', '#4C0C0A'],
-  Yellow: ['#FFFED9', '#FFF4A9', '#FCE677', '#EAB20B', '#C69608', '#996F03', '#6A4103'],
+const COLOR_SCALES: Record<string, { scale: string, hex: string }[]> = {
+  Brand: [
+    { scale: '50', hex: '#FEF3FF' },
+    { scale: '200', hex: '#E5B8EF' },
+    { scale: '300', hex: '#D68EE4' },
+    { scale: '400', hex: '#A642B7' },
+    { scale: '500', hex: '#853291' },
+    { scale: '600', hex: '#732C7C' },
+    { scale: '700', hex: '#612966' },
+    { scale: '900', hex: '#3D1042' },
+  ],
+  Neutral: [
+    { scale: 'white', hex: '#FFFFFF' },
+    { scale: '50', hex: '#F9FAF8' },
+    { scale: '200', hex: '#E5E7EB' },
+    { scale: '400', hex: '#C6CAD0' },
+    { scale: '500', hex: '#8E95A3' },
+    { scale: '600', hex: '#6B7280' },
+    { scale: '700', hex: '#525C6A' },
+    { scale: '900', hex: '#111928' },
+  ],
+  Blue: [
+    { scale: '50', hex: '#EDF7FF' },
+    { scale: '200', hex: '#BCE0F7' },
+    { scale: '300', hex: '#70B7E5' },
+    { scale: '500', hex: '#056DCE' },
+    { scale: '600', hex: '#0457A5' },
+    { scale: '700', hex: '#03417C' },
+    { scale: '900', hex: '#022C52' },
+  ],
+  Green: [
+    { scale: '50', hex: '#E4FCEF' },
+    { scale: '200', hex: '#A2EDC3' },
+    { scale: '300', hex: '#4BDB98' },
+    { scale: '500', hex: '#009C6A' },
+    { scale: '600', hex: '#007D55' },
+    { scale: '700', hex: '#005E40' },
+    { scale: '900', hex: '#003E2A' },
+  ],
+  Orange: [
+    { scale: '50', hex: '#FDF4E9' },
+    { scale: '200', hex: '#FCDDAB' },
+    { scale: '300', hex: '#FABF77' },
+    { scale: '500', hex: '#F7941D' },
+    { scale: '600', hex: '#E0771B' },
+    { scale: '700', hex: '#AD540A' },
+    { scale: '900', hex: '#70320D' },
+  ],
+  Red: [
+    { scale: '50', hex: '#FFF4F3' },
+    { scale: '200', hex: '#FFD9D6' },
+    { scale: '300', hex: '#F3726D' },
+    { scale: '500', hex: '#D73630' },
+    { scale: '600', hex: '#AC2B26' },
+    { scale: '700', hex: '#81201D' },
+    { scale: '900', hex: '#4C0C0A' },
+  ],
+  Yellow: [
+    { scale: '50', hex: '#FFFED9' },
+    { scale: '200', hex: '#FFF4A9' },
+    { scale: '300', hex: '#FCE677' },
+    { scale: '500', hex: '#EAB20B' },
+    { scale: '600', hex: '#C69608' },
+    { scale: '700', hex: '#996F03' },
+    { scale: '900', hex: '#6A4103' },
+  ],
 }
 
 const TYPE_SCALE = [
@@ -20,7 +78,7 @@ const TYPE_SCALE = [
   { cls: 'text-18', spec: '18px / 500 / 0', size: '18px', weight: 500, ls: '0', sample: 'Body 18 — primary reading size for dashboards.', uppercase: false },
   { cls: 'text-16', spec: '16px / 500 / 0', size: '16px', weight: 500, ls: '0', sample: 'Body 16 — secondary paragraphs and descriptions.', uppercase: false },
   { cls: 'text-14', spec: '14px / 500 / 0', size: '14px', weight: 500, ls: '0', sample: 'Body 14 — compact data tables and labels.', uppercase: false },
-  { cls: 'text-12', spec: '12px / 500 / +0.04em', size: '12px', weight: 500, ls: '0.04em', sample: 'LABEL / CAPTION', uppercase: true },
+  { cls: 'text-12', spec: '12px / 500 / 0', size: '12px', weight: 500, ls: '0', sample: 'Body 12 — caption and helper text.', uppercase: false },
   { cls: 'text-10', spec: '10px / 500 / +0.06em', size: '10px', weight: 500, ls: '0.06em', sample: 'OVERLINE / MICRO LABEL', uppercase: true },
 ]
 
@@ -51,6 +109,31 @@ const RADII = [
   { k: '32', v: '32px' },
   { k: '40', v: '40px' },
   { k: 'full', v: '∞' },
+]
+
+const LAYOUT_PATTERNS = [
+  {
+    name: 'Mobile Screen',
+    tokens: [
+      { key: 'page-padding-x', value: '16px', note: 'horizontal edge margin for all screen content' },
+      { key: 'page-padding-top', value: '16px', note: 'below topbar' },
+      { key: 'section-gap', value: '12px', note: 'vertical gap between cards/sections' },
+    ],
+  },
+  {
+    name: 'Card',
+    tokens: [
+      { key: 'card-padding', value: '12px', note: 'internal card padding (not 20px)' },
+      { key: 'card-gap', value: '8px', note: 'gap between cards' },
+    ],
+  },
+  {
+    name: 'Topbar',
+    tokens: [
+      { key: 'topbar-height', value: '48px', note: '' },
+      { key: 'topbar-padding-x', value: '16px', note: '' },
+    ],
+  },
 ]
 
 const TOKENS = [
@@ -90,6 +173,7 @@ LOCKED TOKENS — never use any other values:
   spacing:     0 2 4 8 12 16 20 24 32 40 48 (px)
   radius:      9999px buttons (pill) · 12px cards · 8px inputs · 6px sm
   status:      blue #056DCE · green #009C6A · orange #F7941D · red #D73630
+  layout:      mobile px 16 · topbar 48h/16x · sections 12 · cards 12p/8g
 
 Do not use arbitrary Tailwind values (e.g. w-[437px]).
 Do not invent hex values outside this token set.
@@ -123,6 +207,15 @@ font-weight   = 500 | 700   # no other weights permitted
 
 [spacing]
 valid-px      = 0 2 4 8 12 16 20 24 32 40 48
+
+[layout]
+page-padding-x   = 16px
+page-padding-top = 16px
+section-gap      = 12px
+card-padding     = 12px
+card-gap         = 8px
+topbar-height    = 48px
+topbar-padding-x = 16px
 
 [radius]
 button        = 9999px (pill)
@@ -161,11 +254,22 @@ typography:
   body-18:    { fontSize: "18px", fontWeight: 500 }
   body-16:    { fontSize: "16px", fontWeight: 500 }
   body-14:    { fontSize: "14px", fontWeight: 500 }
-  label-12:   { fontSize: "12px", fontWeight: 500, letterSpacing: "0.04em", textTransform: "uppercase" }
+  body-12:    { fontSize: "12px", fontWeight: 500 }
   micro-10:   { fontSize: "10px", fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase" }
 spacing:
   base:  "4px"
   scale: [0, 2, 4, 8, 12, 16, 20, 24, 32, 40, 48]
+layout:
+  mobile-screen:
+    page-padding-x:   "16px"
+    page-padding-top: "16px"
+    section-gap:      "12px"
+  card:
+    padding: "12px"
+    gap:     "8px"
+  topbar:
+    height:    "48px"
+    padding-x: "16px"
 rounded:
   sm:     "6px"
   input:  "8px"
@@ -188,7 +292,7 @@ components:
   card:
     radius:  "12px"
     border:  "#E5E7EB"
-    padding: "20px"
+    padding: "12px"
 ---
 
 # FunDS Lite — DESIGN.md
@@ -254,7 +358,7 @@ Never invent a hex value outside this spec. When in doubt, use neutral-900 (#111
 
 ## Typography
 
-Inter is the only permitted typeface. Use weight 500 for all body text and 700 for headings and button labels — no other weights. Labels (12px) and micro text (10px) are always uppercase with positive letter-spacing.
+Inter is the only permitted typeface. Use weight 500 for all body text and 700 for headings and button labels — no other weights. \`text-12\` is the body-12 / caption size in normal case. \`text-10\` remains the uppercase micro style with positive letter-spacing.
 
 | Token      | Size  | Weight | Letter-spacing | Notes              |
 |------------|-------|--------|----------------|--------------------|
@@ -263,7 +367,7 @@ Inter is the only permitted typeface. Use weight 500 for all body text and 700 f
 | body-18    | 18px  | 500    | 0              | Primary reading    |
 | body-16    | 16px  | 500    | 0              | Secondary text     |
 | body-14    | 14px  | 500    | 0              | Tables, compact    |
-| label-12   | 12px  | 500    | +0.04em        | Labels (UPPERCASE) |
+| body-12    | 12px  | 500    | 0              | Body / caption     |
 | micro-10   | 10px  | 500    | +0.06em        | Overline (UPPERCASE) |
 
 ---
@@ -275,6 +379,23 @@ Three radius tiers — use them deliberately:
 - **8px:** Inputs, selects, textareas
 - **12px:** Cards, modals, drawers
 - **6px:** Chips, small tags
+
+---
+
+## Layout Patterns
+
+### Mobile Screen
+- page-padding-x: 16px — horizontal edge margin for all screen content
+- page-padding-top: 16px — below topbar
+- section-gap: 12px — vertical gap between cards/sections
+
+### Card
+- card-padding: 12px — internal card padding (not 20px)
+- card-gap: 8px — gap between cards
+
+### Topbar
+- topbar-height: 48px
+- topbar-padding-x: 16px
 
 ---
 
@@ -306,7 +427,12 @@ Radius 8px. Border: #E5E7EB. On focus: border shifts to #853291 + 3px #FEF3FF ri
 | valid       | #009C6A   | —         |
 | error       | #D73630   | #FFF4F3 3px |
 
-Supports prefix element (left adornment, neutral-50 bg) and suffix element (right adornment).
+Sizes: small, medium, large.
+Core states: default, hover, typing, error (while typing), error (default), disabled. Each state can appear as empty or filled.
+Additional info options: label, required, optional, helper text, description, or all combined.
+Supports prefix element and suffix element in clickable or static form.
+Icons may appear on the left or right when they add meaning or an action.
+Also supports tap-area variants for large touch targets.
 
 ### Badge
 Shape: pill (9999px). Padding: 3px 10px. Font: 12px / weight 500.
@@ -322,7 +448,7 @@ Shape: pill (9999px). Padding: 3px 10px. Font: 12px / weight 500.
 | neutral  | #F9FAF8    | #6B7280   |
 
 ### Card
-Radius 12px. Border: 1px solid #E5E7EB. Background: #FFFFFF. Padding: 20px.
+Radius 12px. Border: 1px solid #E5E7EB. Background: #FFFFFF. Padding: 12px.
 Use cards to group related fund information. Never nest cards.
 
 ---
@@ -345,11 +471,107 @@ Use cards to group related fund information. Never nest cards.
 - Don't use any Google Font other than Inter.
 - Don't use purple tones from generic Tailwind palettes — only primary-* tokens.
 - Don't use status color on white without the tint bg pair.
+- Don't use emoji in the design.
 `
+
+const SECTION_SPECS: Record<string, string> = {
+  colors: `## Colors
+
+Brand:
+${COLOR_SCALES.Brand.map(({ scale, hex }) => `- ${scale}: ${hex}`).join('\n')}
+
+Neutral:
+${COLOR_SCALES.Neutral.map(({ scale, hex }) => `- ${scale}: ${hex}`).join('\n')}
+
+Blue:
+${COLOR_SCALES.Blue.map(({ scale, hex }) => `- ${scale}: ${hex}`).join('\n')}
+
+Green:
+${COLOR_SCALES.Green.map(({ scale, hex }) => `- ${scale}: ${hex}`).join('\n')}
+
+Orange:
+${COLOR_SCALES.Orange.map(({ scale, hex }) => `- ${scale}: ${hex}`).join('\n')}
+
+Red:
+${COLOR_SCALES.Red.map(({ scale, hex }) => `- ${scale}: ${hex}`).join('\n')}
+
+Yellow:
+${COLOR_SCALES.Yellow.map(({ scale, hex }) => `- ${scale}: ${hex}`).join('\n')}
+
+Token Reference:
+${TOKENS.map((t) => `- ${t.key}: ${t.hex} — ${t.desc}`).join('\n')}`,
+  typography: `## Typography
+
+${TYPE_SCALE.map((t) => `- ${t.cls}: ${t.spec} -> ${t.sample}`).join('\n')}
+
+Rules:
+- Font family: Inter
+- Allowed weights: 500, 700 only
+- text-12 is body/caption in normal case
+- text-10 is uppercase micro/overline`,
+  spacing: `## Spacing & Sizing
+
+Spacing scale:
+${SPACINGS.map((s) => `- space-${s.v}: ${s.px} (${s.r})`).join('\n')}
+
+Border radius:
+${RADII.map((r) => `- rounded-${r.k}: ${r.v === '∞' ? '9999px' : r.v}`).join('\n')}
+
+Layout Patterns:
+${LAYOUT_PATTERNS.map((group) => `${group.name}:\n${group.tokens.map((token) => `- ${token.key}: ${token.value}${token.note ? ` — ${token.note}` : ''}`).join('\n')}`).join('\n\n')}`,
+  buttons: `## Buttons
+
+- Shape: pill (9999px)
+- Variants: primary, secondary, outline, ghost, danger
+- Sizes: xs, sm, md, lg, xl
+- Font weight: 700
+- Disabled: neutral-200 background, neutral-500 text
+- Focus ring: 2px white + 4px primary-200`,
+  inputs: `## Inputs
+
+- Radius: 8px
+- Border: #E5E7EB
+- Focus: border #853291 + 3px #FEF3FF ring
+- Sizes: small, medium, large
+- States: default, hover, typing, error (while typing), error (default), disabled
+- Supports empty and filled conditions
+- Additional info: label, required, optional, helper, description
+- Prefix and suffix can be clickable or static
+- Use icons on left or right only when they add meaning or action
+- Variants: text input, select, textarea, tap area`,
+  badges: `## Badges
+
+- Shape: pill (9999px)
+- Padding: 3px 10px
+- Font: 12px / 500
+- Variants: primary, blue, green, orange, red, yellow, neutral`,
+  cards: `## Cards
+
+- Radius: 12px
+- Border: 1px solid #E5E7EB
+- Background: #FFFFFF
+- Padding: 12px
+- Use cards to group related information
+- Never nest cards`,
+  prompts: `## System Prompts
+
+Claude System Prompt:
+${CLAUDE_PROMPT}
+
+---
+
+Cursor .cursorrules:
+${CURSOR_RULES}`,
+  llms: `## llms.txt Spec
+
+- Endpoint: https://funds-lite.vercel.app/llms.txt
+- Purpose: machine-readable complete design system spec
+- Includes: color tokens, typography, spacing, components, and guardrails`,
+}
 
 // ── Sections for scroll-spy ──────────────────────────────────────────────────
 const NAV_SECTIONS = [
-  'overview', 'colors', 'typography', 'spacing', 'tokens',
+  'overview', 'colors', 'typography', 'spacing',
   'buttons', 'inputs', 'badges', 'cards', 'prompts', 'llms',
 ]
 
@@ -369,23 +591,28 @@ export default function ManifestPage() {
   function fallbackCopy(text: string, label?: string) {
     const ta = document.createElement('textarea')
     ta.value = text
-    ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none'
+    ta.setAttribute('readonly', 'true')
+    ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none'
     document.body.appendChild(ta)
     ta.focus()
     ta.select()
+    ta.setSelectionRange(0, ta.value.length)
     try { document.execCommand('copy'); showToast(label ?? 'Copied!') }
     catch { showToast('Copy failed — select text manually') }
     document.body.removeChild(ta)
   }
 
-  function copyText(text: string, label?: string) {
-    if (navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(text)
-        .then(() => showToast(label ?? 'Copied!'))
-        .catch(() => fallbackCopy(text, label))
-    } else {
-      fallbackCopy(text, label)
+  async function copyText(text: string, label?: string) {
+    try {
+      if (navigator.clipboard?.writeText && window.isSecureContext) {
+        await navigator.clipboard.writeText(text)
+        showToast(label ?? 'Copied!')
+        return
+      }
+    } catch {
+      // Fall through to the document.execCommand fallback.
     }
+    fallbackCopy(text, label)
   }
 
   function downloadMd() {
@@ -401,6 +628,43 @@ export default function ManifestPage() {
 
   function scrollTo(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  function renderSectionHeader(sectionId: keyof typeof SECTION_SPECS, title: string, sub: ReactNode) {
+    return (
+      <div className="section-header">
+        <div className="section-title-row">
+          <h2 className="section-title">{title}</h2>
+          <button
+            className="section-copy"
+            type="button"
+            aria-label={`Copy ${title} spec`}
+            title={`Copy ${title} spec`}
+            onClick={(event) => {
+              event.preventDefault()
+              void copyText(SECTION_SPECS[sectionId], `${title} spec copied!`)
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+            </svg>
+          </button>
+        </div>
+        <p className="section-sub">{sub}</p>
+      </div>
+    )
   }
 
   // Scroll-spy: highlight active nav item
@@ -447,7 +711,6 @@ export default function ManifestPage() {
           <button className="nav-item" data-section="colors" onClick={() => scrollTo('colors')}>    <span />Colors</button>
           <button className="nav-item" data-section="typography" onClick={() => scrollTo('typography')}><span />Typography</button>
           <button className="nav-item" data-section="spacing" onClick={() => scrollTo('spacing')}>   <span />Spacing &amp; Sizing</button>
-          <button className="nav-item" data-section="tokens" onClick={() => scrollTo('tokens')}>    <span />Token Reference</button>
         </div>
         <div className="nav-section">
           <div className="nav-label">Components</div>
@@ -508,25 +771,47 @@ export default function ManifestPage() {
           {/* ── Colors ───────────────────────────────────────── */}
           <div className="section" id="colors">
             <div className="eyebrow"><span className="eyebrow-num">01 ·</span>Foundations</div>
-            <div className="section-header">
-              <h2 className="section-title">Colors</h2>
-              <p className="section-sub">Hover a tile to see hex · click to copy</p>
-            </div>
-            {Object.entries(COLOR_SCALES).map(([name, colors]) => (
+            {renderSectionHeader('colors', 'Colors', 'Hover a tile to see hex · click to copy')}
+            {Object.entries(COLOR_SCALES).map(([name, scale]) => (
               <div className="color-row" key={name}>
                 <span className="color-label">{name}</span>
-                {colors.map((hex) => (
-                  <div
-                    key={hex}
-                    className="color-tile"
-                    style={{ background: hex }}
-                    data-hex={hex}
-                    title={hex}
-                    onClick={() => copyText(hex, `${hex} copied!`)}
-                  />
+                {scale.map(({ scale, hex }) => (
+                  <div className="color-chip" key={`${name}-${scale}`}>
+                    <div className="color-scale">{scale}</div>
+                    <div
+                      className="color-tile"
+                      style={{ background: hex }}
+                      data-hex={hex}
+                      title={`${name} ${scale} · ${hex}`}
+                      onClick={() => copyText(hex, `${hex} copied!`)}
+                    />
+                  </div>
                 ))}
               </div>
             ))}
+            <div className="comp-section" style={{ marginTop: 28, marginBottom: 0 }}>
+              <div className="comp-label">Token reference</div>
+              <div style={{ background: 'var(--neutral-white)', border: '1px solid var(--neutral-200)', borderRadius: 12, overflow: 'hidden' }}>
+                <table className="tk-tbl">
+                  <thead>
+                    <tr><th>Category</th><th>Token</th><th>Value</th><th>Usage</th></tr>
+                  </thead>
+                  <tbody>
+                    {TOKENS.map((t) => (
+                      <tr key={t.key} onClick={() => copyText(t.hex, `${t.hex} copied!`)}>
+                        <td style={{ fontSize: 12, color: 'var(--neutral-600)' }}>{t.cat}</td>
+                        <td className="tk-key">{t.key}</td>
+                        <td className="tk-val">
+                          <span className="tk-swatch" style={{ background: t.hex }} />
+                          {t.hex}
+                        </td>
+                        <td className="tk-desc">{t.desc}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
 
           <div className="divider" />
@@ -534,10 +819,7 @@ export default function ManifestPage() {
           {/* ── Typography ───────────────────────────────────── */}
           <div className="section" id="typography">
             <div className="eyebrow"><span className="eyebrow-num">02 ·</span>Foundations</div>
-            <div className="section-header">
-              <h2 className="section-title">Typography</h2>
-              <p className="section-sub">Inter · weights <code style={{ fontFamily: 'var(--mono)', fontSize: 12, background: 'var(--primary-50)', color: 'var(--primary-500)', padding: '2px 6px', borderRadius: 4 }}>500</code> and <code style={{ fontFamily: 'var(--mono)', fontSize: 12, background: 'var(--primary-50)', color: 'var(--primary-500)', padding: '2px 6px', borderRadius: 4 }}>700</code> only</p>
-            </div>
+            {renderSectionHeader('typography', 'Typography', <>Inter · weights <code style={{ fontFamily: 'var(--mono)', fontSize: 12, background: 'var(--primary-50)', color: 'var(--primary-500)', padding: '2px 6px', borderRadius: 4 }}>500</code> and <code style={{ fontFamily: 'var(--mono)', fontSize: 12, background: 'var(--primary-50)', color: 'var(--primary-500)', padding: '2px 6px', borderRadius: 4 }}>700</code> only</>)}
             <table className="type-tbl">
               <tbody>
                 {TYPE_SCALE.map((t) => (
@@ -567,10 +849,7 @@ export default function ManifestPage() {
           {/* ── Spacing & Sizing ─────────────────────────────── */}
           <div className="section" id="spacing">
             <div className="eyebrow"><span className="eyebrow-num">03 ·</span>Foundations</div>
-            <div className="section-header">
-              <h2 className="section-title">Spacing &amp; Sizing</h2>
-              <p className="section-sub">4px base rhythm · click row to copy px value</p>
-            </div>
+            {renderSectionHeader('spacing', 'Spacing & Sizing', '4px base rhythm · click row to copy px value')}
             <div className="g2">
               <div>
                 <div className="comp-label">Spacing scale</div>
@@ -600,36 +879,27 @@ export default function ManifestPage() {
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="divider" />
-
-          {/* ── Token Reference ──────────────────────────────── */}
-          <div className="section" id="tokens">
-            <div className="eyebrow"><span className="eyebrow-num">04 ·</span>Foundations</div>
-            <div className="section-header">
-              <h2 className="section-title">Token Reference</h2>
-              <p className="section-sub">Semantic aliases — prefer these over raw color classes in components</p>
-            </div>
-            <div style={{ background: 'var(--neutral-white)', border: '1px solid var(--neutral-200)', borderRadius: 12, overflow: 'hidden' }}>
-              <table className="tk-tbl">
-                <thead>
-                  <tr><th>Category</th><th>Token</th><th>Value</th><th>Usage</th></tr>
-                </thead>
-                <tbody>
-                  {TOKENS.map((t) => (
-                    <tr key={t.key} onClick={() => copyText(t.hex, `${t.hex} copied!`)}>
-                      <td style={{ fontSize: 12, color: 'var(--neutral-600)' }}>{t.cat}</td>
-                      <td className="tk-key">{t.key}</td>
-                      <td className="tk-val">
-                        <span className="tk-swatch" style={{ background: t.hex }} />
-                        {t.hex}
-                      </td>
-                      <td className="tk-desc">{t.desc}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="comp-section" style={{ marginTop: 28, marginBottom: 0 }}>
+              <div className="comp-label">Layout patterns</div>
+              <div style={{ background: 'var(--neutral-white)', border: '1px solid var(--neutral-200)', borderRadius: 12, overflow: 'hidden' }}>
+                <table className="tk-tbl">
+                  <thead>
+                    <tr><th>Pattern</th><th>Token</th><th>Value</th><th>Usage</th></tr>
+                  </thead>
+                  <tbody>
+                    {LAYOUT_PATTERNS.flatMap((group) =>
+                      group.tokens.map((token) => (
+                        <tr key={`${group.name}-${token.key}`} onClick={() => copyText(token.value, `${token.value} copied!`)}>
+                          <td style={{ fontSize: 12, color: 'var(--neutral-600)' }}>{group.name}</td>
+                          <td className="tk-key">{token.key}</td>
+                          <td className="tk-val">{token.value}</td>
+                          <td className="tk-desc">{token.note || 'Standard layout token'}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
 
@@ -637,11 +907,8 @@ export default function ManifestPage() {
 
           {/* ── Buttons ──────────────────────────────────────── */}
           <div className="section" id="buttons">
-            <div className="eyebrow"><span className="eyebrow-num">05 ·</span>Components</div>
-            <div className="section-header">
-              <h2 className="section-title">Buttons</h2>
-              <p className="section-sub">Trigger an action or event — four variants × five sizes</p>
-            </div>
+            <div className="eyebrow"><span className="eyebrow-num">04 ·</span>Components</div>
+            {renderSectionHeader('buttons', 'Buttons', 'Trigger an action or event — four variants × five sizes')}
             <div className="comp-section">
               <div className="comp-label">Variants</div>
               <div className="comp-stage">
@@ -679,61 +946,117 @@ export default function ManifestPage() {
 
           {/* ── Inputs ───────────────────────────────────────── */}
           <div className="section" id="inputs">
-            <div className="eyebrow"><span className="eyebrow-num">06 ·</span>Components</div>
-            <div className="section-header">
-              <h2 className="section-title">Inputs</h2>
-              <p className="section-sub">Retrieve text from a user — supports prefix, suffix, and validation states</p>
+            <div className="eyebrow"><span className="eyebrow-num">05 ·</span>Components</div>
+            {renderSectionHeader('inputs', 'Inputs', 'Text field guidance from the April 28, 2025 FunDS spec: sizes, states, metadata, affixes, icons, and tap-area variants')}
+            <div className="comp-section">
+              <div className="comp-label">Sizes</div>
+              <div className="comp-stage" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 14 }}>
+                <label className="ds-field">
+                  <span className="ds-field-label">Small</span>
+                  <input className="ds-inp ds-inp-sm" placeholder="Placeholder" />
+                </label>
+                <label className="ds-field">
+                  <span className="ds-field-label">Medium</span>
+                  <input className="ds-inp" placeholder="Placeholder" />
+                </label>
+                <label className="ds-field">
+                  <span className="ds-field-label">Large</span>
+                  <input className="ds-inp ds-inp-lg" placeholder="Placeholder" />
+                </label>
+              </div>
             </div>
             <div className="g2">
               <div>
-                <div className="comp-label">Default sizes</div>
-                <div className="comp-stage" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 10 }}>
-                  <input className="ds-inp" style={{ fontSize: 12, padding: '6px 10px' }} placeholder="Small" />
-                  <input className="ds-inp" placeholder="Default" />
-                  <input className="ds-inp" style={{ fontSize: 15, padding: '10px 14px' }} placeholder="Large" />
+                <div className="comp-label">Core states</div>
+                <div className="comp-stage" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 14 }}>
+                  <label className="ds-field">
+                    <span className="ds-field-label">Default</span>
+                    <input className="ds-inp" placeholder="Placeholder" />
+                  </label>
+                  <label className="ds-field">
+                    <span className="ds-field-label">Filled</span>
+                    <input className="ds-inp" defaultValue="This is the input" readOnly />
+                  </label>
+                  <label className="ds-field">
+                    <span className="ds-field-label">Typing</span>
+                    <input className="ds-inp ds-inp-focus" defaultValue="Placeholder|" readOnly />
+                  </label>
                 </div>
               </div>
               <div>
-                <div className="comp-label">Prefix &amp; Suffix</div>
-                <div className="comp-stage" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 10 }}>
-                  <div className="ds-inp-wrap">
-                    <span className="ds-inp-prefix">$</span>
-                    <input className="ds-inp" placeholder="0.00" style={{ borderRadius: '0 8px 8px 0' }} />
+                <div className="comp-label">Prefix, suffix, icons</div>
+                <div className="comp-stage" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 14 }}>
+                  <label className="ds-field">
+                    <span className="ds-field-label">Prefix</span>
+                    <div className="ds-inp-wrap">
+                      <button className="ds-inp-prefix ds-inp-affix-btn" type="button">Rp</button>
+                      <input className="ds-inp" placeholder="Type here" style={{ borderRadius: '0 8px 8px 0' }} />
+                    </div>
+                  </label>
+                  <label className="ds-field">
+                    <span className="ds-field-label">Suffix</span>
+                    <div className="ds-inp-wrap">
+                      <input className="ds-inp ds-inp-pre-suffix" defaultValue="This is the input" readOnly />
+                      <span className="ds-inp-suffix">Gram</span>
+                    </div>
+                  </label>
+                  <label className="ds-field">
+                    <span className="ds-field-label">Right icon</span>
+                    <div className="ds-inp-wrap">
+                      <input className="ds-inp ds-inp-pre-suffix" defaultValue="••••••••••" readOnly />
+                      <button className="ds-inp-suffix ds-inp-affix-btn" type="button" aria-label="Toggle visibility">◔</button>
+                    </div>
+                  </label>
+                </div>
+              </div>
+              
+              <div>
+                <div className="comp-label">Additional info</div>
+                <div className="comp-stage" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 14 }}>
+                  <div className="ds-field">
+                    <div className="ds-field-head">
+                      <span className="ds-field-label">Label</span>
+                      <span className="ds-field-meta">Optional</span>
+                    </div>
+                    <input className="ds-inp" placeholder="Placeholder" />
                   </div>
-                  <div className="ds-inp-wrap">
-                    <input className="ds-inp ds-inp-pre-suffix" placeholder="fund-name" />
-                    <span className="ds-inp-suffix">.vercel.app</span>
+                  <div className="ds-field">
+                    <div className="ds-field-head">
+                      <span className="ds-field-label">Label <span className="ds-field-required">*</span></span>
+                    </div>
+                    <div className="ds-field-desc">Put the description here</div>
+                    <input className="ds-inp" placeholder="Placeholder" />
+                    <span className="ds-field-helper">You can put the helper here.</span>
                   </div>
                 </div>
               </div>
               <div>
-                <div className="comp-label">Validation</div>
-                <div className="comp-stage" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 10 }}>
-                  <input className="ds-inp ds-inp-valid" defaultValue="valid@fund.com" readOnly />
-                  <input className="ds-inp ds-inp-error" defaultValue="bad-input@" readOnly />
+                <div className="comp-label">Error &amp; disabled</div>
+                <div className="comp-stage" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 14 }}>
+                  <label className="ds-field">
+                    <span className="ds-field-label">Error (default)</span>
+                    <input className="ds-inp ds-inp-error" defaultValue="Placeholder" readOnly />
+                    <span className="ds-field-helper ds-field-helper-error">You can put error message here.</span>
+                  </label>
+                  <label className="ds-field">
+                    <span className="ds-field-label">Error (while typing)</span>
+                    <input className="ds-inp ds-inp-error ds-inp-focus" defaultValue="Placeholder|" readOnly />
+                    <span className="ds-field-helper ds-field-helper-error">You can put error message here.</span>
+                  </label>
+                  <label className="ds-field">
+                    <span className="ds-field-label">Disabled</span>
+                    <input className="ds-inp ds-inp-disabled" defaultValue="Placeholder" readOnly disabled />
+                  </label>
                 </div>
               </div>
-              <div>
-                <div className="comp-label">Select &amp; Textarea</div>
-                <div className="comp-stage" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 10 }}>
-                  <select className="ds-inp" style={{ cursor: 'pointer' }}>
-                    <option>Equity Fund</option>
-                    <option>Debt Fund</option>
-                    <option>Real Estate</option>
-                  </select>
-                  <textarea className="ds-inp" style={{ resize: 'vertical', minHeight: 64 }} placeholder="Fund description…" />
-                </div>
-              </div>
+
             </div>
           </div>
 
           {/* ── Badges ───────────────────────────────────────── */}
           <div className="section" id="badges">
-            <div className="eyebrow"><span className="eyebrow-num">07 ·</span>Components</div>
-            <div className="section-header">
-              <h2 className="section-title">Badges</h2>
-              <p className="section-sub">Status indicators and categorical labels</p>
-            </div>
+            <div className="eyebrow"><span className="eyebrow-num">06 ·</span>Components</div>
+            {renderSectionHeader('badges', 'Badges', 'Status indicators and categorical labels')}
             <div className="comp-section">
               <div className="comp-label">Semantic colours</div>
               <div className="comp-stage">
@@ -750,17 +1073,14 @@ export default function ManifestPage() {
 
           {/* ── Cards ────────────────────────────────────────── */}
           <div className="section" id="cards">
-            <div className="eyebrow"><span className="eyebrow-num">08 ·</span>Components</div>
-            <div className="section-header">
-              <h2 className="section-title">Cards</h2>
-              <p className="section-sub">Surface container for grouped fund information</p>
-            </div>
+            <div className="eyebrow"><span className="eyebrow-num">07 ·</span>Components</div>
+            {renderSectionHeader('cards', 'Cards', 'Surface container for grouped information')}
             <div className="g2">
               <div className="demo-card">
-                <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>Northstar Fund III</div>
-                <div style={{ fontSize: 13, color: 'var(--neutral-600)', marginBottom: 16 }}>Series B · Growth Equity</div>
+                <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>Grassroots Growth Series</div>
+                <div style={{ fontSize: 13, color: 'var(--neutral-600)', marginBottom: 16 }}>Series 3 · Balanced</div>
                 <div className="stat-row">
-                  <div className="stat"><div className="stat-label">AUM</div><div className="stat-val" style={{ color: 'var(--primary-500)' }}>$48M</div></div>
+                  <div className="stat"><div className="stat-label">AUM</div><div className="stat-val" style={{ color: 'var(--primary-500)' }}>Rp48M</div></div>
                   <div className="stat"><div className="stat-label">IRR</div><div className="stat-val" style={{ color: 'var(--green-600)' }}>18.4%</div></div>
                   <div className="stat"><div className="stat-label">LPs</div><div className="stat-val">24</div></div>
                 </div>
@@ -771,7 +1091,7 @@ export default function ManifestPage() {
                   <span className="ds-badge ds-badge-orange">Pending</span>
                 </div>
                 <div style={{ fontSize: 13, color: 'var(--neutral-600)' }}>
-                  Q1 2026 distribution notice requires LP confirmation before May 1.
+                  Q1 2026 distribution notice requires confirmation before May 1.
                 </div>
                 <div style={{ display: 'flex', gap: 8, marginTop: 'auto' }}>
                   <button className="ds-btn ds-btn-primary ds-btn-sm">Review</button>
@@ -785,11 +1105,8 @@ export default function ManifestPage() {
 
           {/* ── System Prompts ───────────────────────────────── */}
           <div className="section" id="prompts">
-            <div className="eyebrow"><span className="eyebrow-num">09 ·</span>AI Tools</div>
-            <div className="section-header">
-              <h2 className="section-title">System Prompts</h2>
-              <p className="section-sub">Copy into Claude or Cursor to enforce token compliance on every generation</p>
-            </div>
+            <div className="eyebrow"><span className="eyebrow-num">08 ·</span>AI Tools</div>
+            {renderSectionHeader('prompts', 'System Prompts', 'Copy into Claude or Cursor to enforce token compliance on every generation')}
             <div className="prompt-card">
               <div className="prompt-header">
                 <span className="prompt-lbl">Claude · System Prompt</span>
@@ -808,11 +1125,8 @@ export default function ManifestPage() {
 
           {/* ── llms.txt Spec ────────────────────────────────── */}
           <div className="section" id="llms">
-            <div className="eyebrow"><span className="eyebrow-num">10 ·</span>AI Tools</div>
-            <div className="section-header">
-              <h2 className="section-title">llms.txt Spec</h2>
-              <p className="section-sub">Machine-readable endpoint — one fetch gives an LLM the complete system</p>
-            </div>
+            <div className="eyebrow"><span className="eyebrow-num">09 ·</span>AI Tools</div>
+            {renderSectionHeader('llms', 'llms.txt Spec', 'Machine-readable endpoint — one fetch gives an LLM the complete system')}
             <div className="notice">
               <strong>AI Agents:</strong> Fetch <code>https://funds-lite.vercel.app/llms.txt</code> to get the full
               spec in one request. No HTML, no scripts — clean markdown covering all color tokens, spacing, typography
