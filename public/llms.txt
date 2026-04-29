@@ -146,6 +146,13 @@ Variants: primary | secondary | outline (tertiary) | ghost | danger
 Sizes:    xs (12px) | sm (12px) | default (14px) | lg (16px) | xl (16px)
 States:   default | hover | active | focus-visible | disabled
 Font:     weight 700
+Implementation: src/funds-lite/components/Button.tsx
+Styles: src/funds-lite/components/styles.css
+React API: <Button variant="primary" size="md">Label</Button>
+Props:
+- variant: primary | secondary | outline | ghost | danger
+- size: xs | sm | md | lg | xl
+- accepts native button props including disabled, type, and onClick
 
 Token map:
 - primary:    bg #853291 (gradient overlay), hover bg #732C7C, text white
@@ -157,15 +164,19 @@ Token map:
 
 Disabled: neutral-200 bg, neutral-500 text, cursor not-allowed, no shadow
 Focus ring: 2px white + 4px #E5B8EF (primary-200)
-Class naming: ds-btn ds-btn-{variant} [ds-btn-xs|sm|lg|xl]
+Class naming used internally: ds-btn ds-btn-{variant} [ds-btn-xs|sm|lg|xl]
 
 ### Input
 Radius: 8px | Border: #E5E7EB | Focus ring: #FEF3FF (3px) + border #853291
-Sizes: small | medium | large
-States: default | hover | typing | error while typing | error default | disabled
+Implementation: src/funds-lite/components/Input.tsx
+Styles: src/funds-lite/components/styles.css
+React API: <Input label="Amount" prefix="Rp" placeholder="Type here" />
+Sizes: sm | md | lg
+States: default | focus | valid | error | disabled
 Conditions: empty | filled
-Additional info: label | required | optional | helper | description | all combined
-Supports: prefix element (clickable or static) | suffix element (clickable or static)
+Additional info props: label | required | optionalText | helperText | description
+Supports: prefix prop (clickable or static) | suffix prop (clickable or static)
+Clickable affixes: set prefixInteractive/suffixInteractive and pass prefixButtonProps/suffixButtonProps for aria-label and handlers
 Icons: left icon | right icon when meaningful or actionable
 Variants: text input | select | textarea | tap area
 

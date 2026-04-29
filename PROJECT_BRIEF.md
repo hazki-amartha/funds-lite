@@ -2,10 +2,23 @@ Goal: Build a Single-Page simplified design component library that acts as a sit
 
 The documentation is a stand alone high-density, single-page application to avoid CSS conflicts with existing portals.
 
-Architecture:
-Plaintext/packages/tokens       ← Design tokens (TS)
+Target Architecture:
+/packages/tokens                ← Design tokens (TS)
 /packages/components            ← React component library
 /apps/manifest                  ← Standalone Single-Page Dashboard (Next.js, to be hosted on Vercel)
+
+Current Light Structure:
+/src/funds-lite/tokens.ts       ← Extracted token data used by the manifest UI
+/src/funds-lite/specs.ts        ← Copyable DESIGN.md, section specs, Claude prompt, Cursor rules
+/src/funds-lite/components      ← Initial reusable Button and Input React components plus component-owned CSS
+/app/page.tsx                   ← Manifest page composition and browser interactions only
+/public/llms.txt                ← Current machine-readable AI endpoint
+
+Near-term migration path:
+1. Keep design-system truth out of app/page.tsx.
+2. Move reusable Button/Input/Badge/Card implementations into /src/funds-lite/components before promoting them to /packages/components.
+3. Generate or synchronize /llms.txt from /src/funds-lite/specs.ts so humans and AI consume the same underlying source.
+4. Promote /src/funds-lite/tokens.ts to /packages/tokens when package publishing or multi-app consumption becomes real.
 
 Single Source: Both humans and AI use the same URL to consume the design system.
 

@@ -1,0 +1,134 @@
+/* FunDS Button component styles */
+.ds-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 12px; border-radius: 9999px;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer; border: 1px solid transparent;
+  transition: all .15s; white-space: nowrap; font-family: var(--font);
+  min-width: 80px;
+}
+
+.ds-btn-primary {
+  background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 100%), var(--primary-500);
+  border-color: hsla(0, 0%, 100%, 0.16);
+  color: white;
+  box-shadow: 0 0 0 1px var(--primary-600), 0 2px 3px 0 rgba(133,50,145,0.3);
+}
+.ds-btn-primary:not(:disabled):hover {
+  background: linear-gradient(180deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.16) 100%), var(--primary-600);
+}
+.ds-btn-primary:not(:disabled):active,
+.ds-btn-primary:not(:disabled):focus-visible {
+  background: linear-gradient(180deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.12) 100%), var(--primary-600);
+  box-shadow: 0 2px 3px 0 rgba(133,50,145,0.3), 0 0 0 2px white, 0 0 0 4px var(--primary-200);
+}
+.ds-btn-primary:disabled {
+  background: var(--neutral-200); border-color: var(--neutral-200);
+  color: var(--neutral-500); box-shadow: none;
+}
+
+.ds-btn-secondary {
+  background: white; border-color: var(--primary-500);
+  color: var(--primary-500);
+  box-shadow: 0 1px 2px 0 rgba(164,172,185,0.24);
+}
+.ds-btn-secondary:not(:disabled):hover {
+  background: linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(247,236,251,0.5) 100%), white;
+}
+.ds-btn-secondary:not(:disabled):active,
+.ds-btn-secondary:not(:disabled):focus-visible {
+  box-shadow: 0 0 0 2px white, 0 0 0 4px var(--primary-200);
+}
+.ds-btn-secondary:disabled {
+  background: var(--neutral-50); border-color: var(--neutral-200);
+  color: var(--neutral-500); box-shadow: none;
+}
+
+.ds-btn-outline {
+  background: white; border-color: var(--neutral-200);
+  color: var(--neutral-900);
+  box-shadow: 0 1px 2px 0 rgba(164,172,185,0.24);
+}
+.ds-btn-outline:not(:disabled):hover {
+  background: linear-gradient(180deg, rgba(229,231,235,0) 0%, rgba(229,231,235,0.5) 100%), white;
+  border-color: var(--neutral-400);
+}
+.ds-btn-outline:not(:disabled):active,
+.ds-btn-outline:not(:disabled):focus-visible {
+  box-shadow: 0 0 0 2px white, 0 0 0 4px var(--neutral-200);
+  border-color: var(--neutral-200);
+}
+.ds-btn-outline:disabled {
+  background: var(--neutral-50); border-color: var(--neutral-200);
+  color: var(--neutral-500); box-shadow: none;
+}
+
+.ds-btn-ghost { background: none; border-color: transparent; color: var(--primary-500); }
+.ds-btn-ghost:not(:disabled):hover { background: var(--primary-50); }
+.ds-btn-ghost:not(:disabled):active,
+.ds-btn-ghost:not(:disabled):focus-visible {
+  background: var(--primary-50);
+  box-shadow: 0 0 0 2px white, 0 0 0 4px var(--primary-200);
+}
+.ds-btn-ghost:disabled { background: none; border-color: transparent; color: var(--neutral-500); }
+
+.ds-btn-danger { background: var(--red-500); border-color: var(--red-500); color: white; }
+.ds-btn-danger:not(:disabled):hover { background: var(--red-600); border-color: var(--red-600); }
+
+.ds-btn:disabled { cursor: not-allowed; pointer-events: none; }
+
+.ds-btn-xs { padding: 4px 8px;   font-size: 12px; min-width: 48px; }
+.ds-btn-sm { padding: 8px 10px;  font-size: 12px; min-width: 64px; }
+.ds-btn-lg { padding: 12px 16px; font-size: 16px; min-width: 100px; }
+.ds-btn-xl { padding: 12px 20px; font-size: 16px; min-width: 116px; }
+
+/* FunDS Input component styles */
+.ds-inp {
+  font-family: var(--font); font-size: 13px; padding: 8px 12px;
+  border: 1px solid var(--neutral-200); border-radius: 8px;
+  background: var(--neutral-white); color: var(--neutral-900);
+  outline: none; transition: border-color .15s, box-shadow .15s; width: 100%;
+}
+.ds-inp:focus { border-color: var(--primary-500); box-shadow: 0 0 0 3px var(--primary-50); }
+.ds-inp::placeholder { color: var(--neutral-400); }
+.ds-inp-sm { font-size: 12px; padding: 6px 10px; }
+.ds-inp-lg { font-size: 15px; padding: 10px 14px; }
+.ds-inp-focus { border-color: var(--primary-500); box-shadow: 0 0 0 3px var(--primary-50); }
+.ds-inp-valid { border-color: var(--green-500); }
+.ds-inp-error { border-color: var(--red-500); }
+.ds-inp-error:focus { box-shadow: 0 0 0 3px var(--red-50); }
+.ds-inp-error.ds-inp-focus { box-shadow: 0 0 0 3px var(--red-50); }
+.ds-inp-disabled { background: var(--neutral-50); color: var(--neutral-500); cursor: not-allowed; }
+.ds-field { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+.ds-field-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.ds-field-label { font-size: 12px; font-weight: 500; color: var(--neutral-900); }
+.ds-field-meta { font-size: 12px; color: var(--neutral-500); }
+.ds-field-required { color: var(--red-500); }
+.ds-field-desc { font-size: 12px; color: var(--neutral-600); }
+.ds-field-helper { font-size: 12px; color: var(--neutral-600); }
+.ds-field-helper-error { color: var(--red-500); }
+.ds-inp-wrap { display: flex; }
+.ds-inp-prefix, .ds-inp-suffix {
+  padding: 8px 12px; background: var(--neutral-50);
+  border: 1px solid var(--neutral-200); font-size: 13px;
+  color: var(--neutral-600); white-space: nowrap;
+}
+.ds-inp-affix-btn { cursor: pointer; font-family: var(--font); }
+.ds-inp-prefix { border-right: none; border-radius: 8px 0 0 8px; }
+.ds-inp-suffix { border-left: none; border-radius: 0 8px 8px 0; }
+.ds-inp-prefix + .ds-inp { border-radius: 0 8px 8px 0; }
+.ds-inp-pre-suffix { border-radius: 8px 0 0 8px; }
+.ds-tap-area {
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--neutral-200);
+  background: var(--neutral-white);
+  color: var(--neutral-400);
+  font-family: var(--font);
+  font-size: 13px;
+  cursor: pointer;
+}
+.ds-tap-area-sm { font-size: 12px; padding: 6px 10px; }
+.ds-tap-area-lg { font-size: 15px; padding: 10px 14px; }
