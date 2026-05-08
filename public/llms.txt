@@ -7,82 +7,107 @@
 
 ## OVERVIEW
 
-FunDS Lite is the public-facing slice of the Amartha FunDS design system.
+FunDS Lite is the lightweight subset of the Amartha FunDS design system.
 It covers just enough tokens, components, and patterns to keep the mobile app
-and internal dashboard in sync.
+and internal dashboard in sync. The brand anchors in a single purple (#853291) —
+every primary action, link, and active state uses this color.
 
 Surfaces: Mobile (primary), Internal Dashboard
 
 ---
 
-## COLOR TOKENS
+## PRODUCT CONTEXT
+
+Amartha Financial (https://amartha.com/) — micro-finance lending for grassroot women in Indonesia.
+
+Products:
+- Modal         — Digital productive loan (primary borrower product)
+- Group Loan    — Non-digital group loan (deprecated; migrating to Modal)
+- Celengan      — Retail investment, grassroot market
+- GGS           — Grassroot Growth Series, retail investment middle-upper class
+- B2B Funding   — Institutional funding (not in AmarthaFin App)
+- PPOB / AmarthaLink — B2C bill payment & agent-based PPOB
+- Poket         — In-app wallet for Amartha ecosystem
+
+Platforms:
+- AmarthaFin App  — Consumer iOS/Android (borrowers, investors, PPOB users)
+- NG-MIS          — Internal ops system / potential CRM
+- A-Partner App   — Internal app for field partners/agents
+
+---
+
+## TOKENS — COLORS
 
 ### Brand (Primary Purple)
-primary-50:  #FEF3FF  — tinted backgrounds, badge fills
-primary-200: #E5B8EF  — hover backgrounds
-primary-300: #D68EE4  — illustrative / decorative
-primary-400: #A642B7  — secondary actions
-primary-500: #853291  — PRIMARY — buttons, links, active states
-primary-600: #732C7C  — hover / pressed state for primary
-primary-700: #612966  — on-light text emphasis
-primary-900: #3D1042  — deep emphasis
+
+--primary-50:  #FEF3FF  — badge fills, focus rings, ghost hover backgrounds
+--primary-200: #E5B8EF  — focus ring outer glow
+--primary-300: #D68EE4  — illustrative / decorative
+--primary-400: #A642B7  — secondary decorative actions
+--primary-500: #853291  — PRIMARY — buttons, links, active states
+--primary-600: #732C7C  — hover / pressed state
+--primary-700: #612966  — on-light text emphasis
+--primary-900: #3D1042  — deep emphasis
 
 ### Neutral
-neutral-white: #FFFFFF  — surface / card backgrounds
-neutral-50:    #F9FAF8  — page background
-neutral-200:   #E5E7EB  — borders (default)
-neutral-400:   #C6CAD0  — placeholder text
-neutral-500:   #8E95A3  — disabled state
-neutral-600:   #6B7280  — caption / secondary text
-neutral-700:   #525C6A  — secondary text emphasis
-neutral-900:   #111928  — default text (darkest)
 
-### Saturated — Status Colors
-blue-50:    #EDF7FF  | blue-500:   #056DCE  — informational
-green-50:   #E4FCEF  | green-500:  #009C6A  — success / funded
-orange-50:  #FDF4E9  | orange-500: #F7941D  — warning / pending
-red-50:     #FFF4F3  | red-500:    #D73630  — error / overdue / danger
-yellow-50:  #FFFED9  | yellow-500: #EAB20B  — accent / review
+--neutral-white: #FFFFFF  — surface / card backgrounds
+--neutral-50:    #F9FAF8  — page background
+--neutral-200:   #E5E7EB  — borders (default)
+--neutral-400:   #C6CAD0  — placeholder text
+--neutral-500:   #8E95A3  — disabled state
+--neutral-600:   #6B7280  — caption / secondary text
+--neutral-700:   #525C6A  — secondary text emphasis
+--neutral-900:   #111928  — default text (darkest)
+
+### Status Colors
+
+Always pair the 500 foreground with its 50-tint background.
+Never use a status color on white or neutral-50 without the tint.
+
+--blue-50:    #EDF7FF  |  --blue-500:    #056DCE  — informational
+--green-50:   #E4FCEF  |  --green-500:   #009C6A  — success / funded
+--orange-50:  #FDF4E9  |  --orange-500:  #F7941D  — warning / pending
+--red-50:     #FFF4F3  |  --red-500:     #D73630  — error / overdue / danger
+--yellow-50:  #FFFED9  |  --yellow-500:  #EAB20B  — accent / review
+
+### Semantic Token Aliases
+
+Use these names in component code — prefer over raw hex.
+
+text-default:     --neutral-900 (#111928)  — primary readable text
+text-caption:     --neutral-600 (#6B7280)  — secondary / supporting text
+text-disabled:    --neutral-500 (#8E95A3)  — disabled labels
+text-placeholder: --neutral-400 (#C6CAD0)  — input placeholder text
+text-link:        --primary-500 (#853291)  — clickable links
+
+border-default:   --neutral-200 (#E5E7EB)  — card and input borders
+border-light:     --neutral-50  (#F9FAF8)  — subtle dividers
+
+bg-overlay:       rgba(17, 25, 40, 0.8)   — modal / drawer overlays
 
 ---
 
-## SEMANTIC TOKEN ALIASES
+## TOKENS — TYPOGRAPHY
 
-Use these aliases in components — prefer over raw color names.
-
-text-default:     #111928  (neutral-900) — primary readable text
-text-caption:     #6B7280  (neutral-600) — secondary / supporting text
-text-disabled:    #8E95A3  (neutral-500) — disabled labels
-text-placeholder: #C6CAD0  (neutral-400) — input placeholder text
-text-link:        #853291  (primary-500) — clickable links
-
-border-default:   #E5E7EB  (neutral-200) — card and input borders
-border-light:     #F9FAF8  (neutral-50)  — subtle dividers
-
-bg-overlay:       rgba(17, 25, 40, 0.8)  — modal/drawer overlays
-
----
-
-## TYPOGRAPHY
-
-Font Family: Inter (Google Fonts)
-Weights: 500 (regular), 700 (bold) — NO OTHER WEIGHTS PERMITTED
+Font Family: Inter (Google Fonts) — var(--font)
+Weights: 500 (body), 700 (headings/buttons) — NO OTHER WEIGHTS PERMITTED
 
 ### Type Scale
-text-24: 24px / weight 700 / letter-spacing -0.02em  → Heading 24
-text-20: 20px / weight 700 / letter-spacing -0.01em  → Heading 20
-text-18: 18px / weight 500 / letter-spacing 0        → Body 18 (primary reading)
-text-16: 16px / weight 500 / letter-spacing 0        → Body 16 (secondary)
-text-14: 14px / weight 500 / letter-spacing 0        → Body 14 (tables, compact)
-text-12: 12px / weight 500 / letter-spacing 0        → Body 12 / Caption
-text-10: 10px / weight 500 / letter-spacing +0.06em  → Overline / Micro (UPPERCASE)
+
+text-24: 24px / weight 700 / letter-spacing -0.02em  → Page titles / primary headings
+text-20: 20px / weight 700 / letter-spacing -0.01em  → Section headings
+text-18: 18px / weight 500 / letter-spacing 0        → Primary reading size (dashboards)
+text-16: 16px / weight 500 / letter-spacing 0        → Secondary paragraphs and descriptions
+text-14: 14px / weight 500 / letter-spacing 0        → Compact data tables and labels
+text-12: 12px / weight 500 / letter-spacing 0        → Body / caption / helper text
+text-10: 10px / weight 500 / letter-spacing +0.06em  → Overline / micro (UPPERCASE only)
 
 ---
 
-## SPACING
+## TOKENS — SPACING & SHAPES
 
-Base rhythm: 4px
-Tailwind classes use numeric suffix = pixel value.
+Base rhythm: 4px | Tailwind class suffix = pixel value
 
 space-0:  0px   (p-0,  m-0)
 space-2:  2px   (p-2,  m-2)
@@ -98,43 +123,31 @@ space-48: 48px  (p-48, m-48)
 
 FORBIDDEN: 5, 6, 10, 15, 25, 30px — never use values not in the scale above.
 
----
+### Border Radius
 
-## LAYOUT PATTERNS
+rounded-6:    6px     — chips, small tags
+rounded-8:    8px     — inputs, selects, textareas (DEFAULT interactive)
+rounded-12:   12px    — cards, modals, drawers
+rounded-full: 9999px  — buttons and badges (pill shape)
 
-### Mobile Screen
+### Layout Patterns
+
 page-padding-x:   16px  — horizontal edge margin for all screen content
 page-padding-top: 16px  — below topbar
 section-gap:      12px  — vertical gap between cards/sections
-
-### Card
 card-padding:     12px  — internal card padding (not 20px)
 card-gap:         8px   — gap between cards
-
-### Topbar
 topbar-height:    48px
 topbar-padding-x: 16px
 
 ---
 
-## BORDER RADIUS
+## SURFACES
 
-rounded-none: 0px    — sharp corners
-rounded-2:    2px    — micro
-rounded-4:    4px    — subtle
-rounded-6:    6px    — small (sm) — chips, tags
-rounded-8:    8px    — DEFAULT — buttons, inputs
-rounded-12:   12px   — cards, modals
-rounded-16:   16px   — large containers
-rounded-20:   20px   — XL panels
-rounded-24:   24px   — hero sections
-rounded-32:   32px   — decorative
-rounded-40:   40px   — pill-like large
-rounded-full: 9999px — pill / circular
-
-Primary radius for interactive elements: 8px
-Card radius: 12px
-Small element radius: 6px
+Level 0 — Page Background:  #F9FAF8  (--neutral-50)    — primary page / screen background
+Level 1 — Surface / Card:   #FFFFFF  (--neutral-white)  — card and modal backgrounds
+       — Brand Tint:         #FEF3FF  (--primary-50)     — badge fills, ghost hover, focus rings
+       — Overlay:            rgba(17, 25, 40, 0.8)       — modal / drawer overlays
 
 ---
 
@@ -143,84 +156,70 @@ Small element radius: 6px
 ### Button
 Shape:    pill (border-radius 9999px)
 Variants: primary | secondary | outline (tertiary) | ghost | danger
-Sizes:    xs (12px) | sm (12px) | default (14px) | lg (16px) | xl (16px)
+Sizes:    xs (12px) | sm (12px) | md (14px) | lg (16px) | xl (16px)
 States:   default | hover | active | focus-visible | disabled
 Font:     weight 700
 Implementation: src/funds-lite/components/Button.tsx
-Styles: src/funds-lite/components/styles.css
 React API: <Button variant="primary" size="md">Label</Button>
-Props:
-- variant: primary | secondary | outline | ghost | danger
-- size: xs | sm | md | lg | xl
-- accepts native button props including disabled, type, and onClick
+Props: variant, size — accepts native button props (disabled, type, onClick)
 
 Token map:
-- primary:    bg #853291 (gradient overlay), hover bg #732C7C, text white
-              box-shadow: 0 0 0 1px #732C7C, 0 2px 3px rgba(133,50,145,0.3)
-- secondary:  bg white, border #853291, text #853291, hover tint bg
-- outline:    bg white, border #E5E7EB, text #111928, hover border #C6CAD0
-- ghost:      bg transparent, border transparent, text #853291, hover bg #FEF3FF
-- danger:     bg #D73630, border #D73630, text white, hover bg #AC2B26
+- primary:   bg var(--primary-500) + gradient, hover var(--primary-600), text white
+             box-shadow: 0 0 0 1px var(--primary-600), 0 2px 3px rgba(133,50,145,0.3)
+- secondary: bg white, border var(--primary-500), text var(--primary-500), hover var(--primary-50) tint
+- outline:   bg white, border var(--neutral-200), text var(--neutral-900), hover var(--neutral-400) border
+- ghost:     bg transparent, text var(--primary-500), hover bg var(--primary-50)
+- danger:    bg var(--red-500), border var(--red-500), text white, hover var(--red-600)
 
-Disabled: neutral-200 bg, neutral-500 text, cursor not-allowed, no shadow
-Focus ring: 2px white + 4px #E5B8EF (primary-200)
-Class naming used internally: ds-btn ds-btn-{variant} [ds-btn-xs|sm|lg|xl]
+Disabled: var(--neutral-200) bg, var(--neutral-500) text, cursor not-allowed, no shadow
+Focus ring: 2px white + 4px var(--primary-200) (#E5B8EF)
 
 ### Input
-Radius: 8px | Border: #E5E7EB | Focus ring: #FEF3FF (3px) + border #853291
+Radius: 8px | Border: var(--neutral-200) | Focus: border var(--primary-500) + 3px var(--primary-50) ring
 Implementation: src/funds-lite/components/Input.tsx
-Styles: src/funds-lite/components/styles.css
 React API: <Input label="Amount" prefix="Rp" placeholder="Type here" />
 Sizes: sm | md | lg
 States: default | focus | valid | error | disabled
 Conditions: empty | filled
-Additional info props: label | required | optionalText | helperText | description
-Supports: prefix prop (clickable or static) | suffix prop (clickable or static)
-Clickable affixes: set prefixInteractive/suffixInteractive and pass prefixButtonProps/suffixButtonProps for aria-label and handlers
-Icons: left icon | right icon when meaningful or actionable
+Additional info: label | required | optionalText | helperText | description
+Prefix/suffix: clickable via prefixInteractive/suffixInteractive + prefixButtonProps/suffixButtonProps
+Icons: left or right when meaningful or actionable
 Variants: text input | select | textarea | tap area
 
+State token map:
+- default:  border var(--neutral-200)
+- focus:    border var(--primary-500), ring var(--primary-50) 3px
+- valid:    border var(--green-500)
+- error:    border var(--red-500), ring var(--red-50) 3px
+
 ### Badge
-Shape: pill (border-radius 9999px) | Padding: 3px 10px | Font: 12px/500
-Variants:
-- primary: bg #FEF3FF, text #732C7C
-- blue:    bg #EDF7FF, text #0457A5
-- green:   bg #E4FCEF, text #007D55
-- orange:  bg #FDF4E9, text #AD540A
-- red:     bg #FFF4F3, text #AC2B26
-- yellow:  bg #FFFED9, text #996F03
-- neutral: bg #F9FAF8, text #6B7280, border #E5E7EB
+Shape: pill (border-radius 9999px) | Padding: 3px 10px | Font: 12px / weight 500
+
+Variant token map:
+- primary: bg var(--primary-50) (#FEF3FF),  text var(--primary-600) (#732C7C)
+- blue:    bg var(--blue-50)    (#EDF7FF),  text var(--blue-600)    (#0457A5)
+- green:   bg var(--green-50)   (#E4FCEF),  text var(--green-600)   (#007D55)
+- orange:  bg var(--orange-50)  (#FDF4E9),  text var(--orange-700)  (#AD540A)
+- red:     bg var(--red-50)     (#FFF4F3),  text var(--red-600)     (#AC2B26)
+- yellow:  bg var(--yellow-50)  (#FFFED9),  text var(--yellow-700)  (#996F03)
+- neutral: bg var(--neutral-50) (#F9FAF8),  text var(--neutral-600) (#6B7280)
 
 ### Card
-Radius: 12px | Border: 1px solid #E5E7EB | Background: #FFFFFF | Padding: 12px
-
----
-
-## TAILWIND CONFIG REFERENCE
-
-The locked Tailwind config is the single source of truth for utility classes.
-Only generate classes derivable from this config — never use arbitrary values.
-
-colors.primary.500 = #853291
-colors.neutral.900 = #111928
-fontFamily.sans    = Inter
-fontWeight.regular = 500
-fontWeight.bold    = 700
-spacing.*          = see spacing table above
-borderRadius.*     = see radius table above
+Radius: 12px | Border: 1px solid var(--neutral-200) | Background: var(--neutral-white) | Padding: 12px
+Never nest cards. Use to group related fund information.
 
 ---
 
 ## DO / DON'T GUARDRAILS
 
 DO:
-✓ Use primary-500 (#853291) for all primary actions
-✓ Use Inter at weight 500 or 700 only
-✓ Use spacing values from the defined scale (0,2,4,8,12,16,20,24,32,40,48)
-✓ Use the mobile layout guide: 16px page padding, 12px section gaps, 12px card padding, 8px card gaps, 48px topbar height
-✓ Use semantic token names (text-default, border-default) over raw colors
-✓ Use rounded-8 for buttons/inputs, rounded-12 for cards
-✓ Pair status colors with their 50-tint background (e.g. red-500 on red-50 bg)
+✓ Use var(--primary-500) (#853291) for all primary actions, links, and active states
+✓ Pair every status color with its 50-tint background (e.g. var(--red-500) text on var(--red-50) bg)
+✓ Use Inter at weight 500 or 700 only — no other weights
+✓ Use spacing values from the defined scale (0,2,4,8,12,16,20,24,32,40,48px)
+✓ Use the mobile layout guide: 16px page padding, 12px section gaps, 12px card padding, 8px card gaps
+✓ Use semantic alias names (text-default, border-default) over raw hex in component code
+✓ Use rounded-full (9999px) for buttons/badges, rounded-8 for inputs, rounded-12 for cards
 
 DON'T:
 ✗ Never use arbitrary Tailwind values like w-[437px] or text-[#abc]
@@ -228,57 +227,90 @@ DON'T:
 ✗ Never use font-weight 400, 600, or 800
 ✗ Never use spacing values not in the defined scale (e.g. 5px, 10px, 15px)
 ✗ Never use Google Fonts other than Inter
-✗ Never use purple colors from generic palettes — only primary-* tokens
+✗ Never use purple from generic Tailwind palettes — only var(--primary-*) tokens
+✗ Never use a status color on white without the tint bg pair
 ✗ Never use emoji in the design
 
 ---
 
-## STARTER PROMPTS
+## AGENT PROMPT GUIDE
 
-### Build a fund dashboard card:
-"Using FunDS Lite tokens, build a React card component showing fund name,
-AUM, IRR, and status badge. Use rounded-12, border-default, and p-12."
+Quick token reference:
+- Primary action:  var(--primary-500) #853291
+- Primary hover:   var(--primary-600) #732C7C
+- Text default:    var(--neutral-900) #111928
+- Page background: var(--neutral-50)  #F9FAF8
+- Card surface:    var(--neutral-white) #FFFFFF
+- Border:          var(--neutral-200)  #E5E7EB
 
-### Build a data table:
-"Using FunDS Lite, build a table with text-14 body, neutral-200 borders,
-neutral-50 header background, and status badges for fund state."
+Example component prompts:
 
-### Build a form:
-"Using FunDS Lite inputs with rounded-8, border-default, and primary-500
-focus ring. Include a $ prefix input for amount and a select for fund type."
+1. Fund Dashboard Card:
+   "Build a React card with var(--neutral-white) bg, rounded-12, 1px solid var(--neutral-200) border,
+   12px padding. Fund name in text-16 weight 700 (var(--neutral-900)), AUM/IRR stats in text-14 weight 500.
+   Status badge using Badge component with variant matching fund state."
+
+2. Primary Action Button:
+   "var(--primary-500) background, white text, rounded-full (9999px), text-14 weight 700, 8px 12px padding.
+   Hover shifts to var(--primary-600). Use <Button variant='primary'>Label</Button>."
+
+3. Data Table:
+   "text-14 weight 500 (var(--neutral-900)), var(--neutral-200) bottom border per row,
+   var(--neutral-50) header background. Status column uses Badge component."
+
+4. Amount Input with Prefix:
+   "<Input label='Amount' prefix='Rp' prefixInteractive prefixButtonProps={{ 'aria-label': 'Choose currency' }}
+   placeholder='0' /> — radius 8px, border var(--neutral-200), focus ring var(--primary-500) + var(--primary-50)."
+
+5. Topbar:
+   "48px height, var(--neutral-white) background, 1px solid var(--neutral-200) border-bottom.
+   Logo in var(--primary-500). Nav items text-14 weight 500 (var(--neutral-600)), active in
+   var(--neutral-900) weight 700."
 
 ---
 
-## AMARTHA PRODUCT CONTEXT
+## QUICK START — CSS CUSTOM PROPERTIES
 
-Amartha Financial (https://amartha.com/) is a micro-finance lending company focused on
-productive micro loans for grassroot women in Indonesia.
+:root {
+  /* Brand */
+  --primary-50:  #FEF3FF;
+  --primary-200: #E5B8EF;
+  --primary-300: #D68EE4;
+  --primary-400: #A642B7;
+  --primary-500: #853291;
+  --primary-600: #732C7C;
+  --primary-700: #612966;
+  --primary-900: #3D1042;
 
-### Product Suite
+  /* Neutral */
+  --neutral-white: #FFFFFF;
+  --neutral-50:    #F9FAF8;
+  --neutral-200:   #E5E7EB;
+  --neutral-400:   #C6CAD0;
+  --neutral-500:   #8E95A3;
+  --neutral-600:   #6B7280;
+  --neutral-700:   #525C6A;
+  --neutral-900:   #111928;
 
-Productive Loan:
-- Modal         — Digital loan product (primary borrower product)
-- Group Loan    — Non-digital group loan (deprecated; migrating to Modal)
+  /* Status */
+  --blue-50:     #EDF7FF;  --blue-500:    #056DCE;  --blue-600:    #0457A5;
+  --green-50:    #E4FCEF;  --green-500:   #009C6A;  --green-600:   #007D55;
+  --orange-50:   #FDF4E9;  --orange-500:  #F7941D;  --orange-700:  #AD540A;
+  --red-50:      #FFF4F3;  --red-500:     #D73630;  --red-600:     #AC2B26;
+  --yellow-50:   #FFFED9;  --yellow-500:  #EAB20B;  --yellow-700:  #996F03;
 
-Funding / Investment:
-- B2B Funding   — Institutional funding (not available in AmarthaFin App)
-- Celengan      — Retail investment, primarily for grassroot market
-- GGS (Grassroot Growth Series) — Retail investment for middle-upper class investors
+  /* Typography */
+  --font: 'Inter', ui-sans-serif, system-ui, sans-serif;
 
-PPOB (Payment Point Online Bank):
-- PPOB          — B2C bill payment features
-- AmarthaLink   — Agent-based PPOB feature
-
-Wallet:
-- Poket         — In-app wallet for transactions within the Amartha ecosystem
-
-### Platforms
-
-- AmarthaFin App  — Consumer-facing mobile app (iOS & Android).
-                    Primary platform for borrowers, investors, and PPOB users.
-- NG-MIS          — Internal Management Information System for Amartha ops/staff.
-                    Potentially evolving into a CRM.
-- A-Partner App   — Internal app for field partners/agents.
+  /* Layout */
+  --page-padding-x:   16px;
+  --page-padding-top: 16px;
+  --section-gap:      12px;
+  --card-padding:     12px;
+  --card-gap:         8px;
+  --topbar-height:    48px;
+  --topbar-padding-x: 16px;
+}
 
 ---
 

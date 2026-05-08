@@ -35,7 +35,7 @@ Refer to funds-manifest-2.html for the page design (but for sidebar and color sc
 
 2. AI Entry Points
 /llms.txt: A clean, markdown-only endpoint containing the full system spec for LLMs to read in one fetch.
-Copyable DESIGN.md: A button to copy the entire design system's rules into the clipboard for immediate pasting into chat tools or download it as a skill.
+Copyable DESIGN.md: A button to copy the entire design system's rules into the clipboard for immediate pasting into chat tools or download it as a file.
 System Prompts: Pre-baked "Instruction Blocks" for Claude and Cursor to enforce guardrails (e.g., "Only use Tailwind classes from the locked config").
 
 Updated How It Works
@@ -49,3 +49,27 @@ For Local Iteration
 Open Cursor in a new project.
 Copy the .cursorrules text from the Manifest site.
 The AI now knows the exact token limits (spacing, colors, radius) and won't hallucinate arbitrary values.
+
+---
+
+Design Doc Format (DESIGN.md + llms.txt)
+Reference files are kept in /reference/ — DESIGN compact.md (baseline) and DESIGN extended.md (target format).
+
+We follow the extended format for both DESIGN.md and llms.txt. Key principles:
+
+Token columns everywhere — color, type scale, and component variant tables always include the CSS variable name (--primary-500, --neutral-200, etc.) alongside the hex value. This lets an agent copy-paste the right var() reference without inference.
+
+CSS variable names are the source of truth — never raw hex in component descriptions. Tables read: Name | Value | Token | Role.
+
+Sections follow this order: Product Context → Tokens — Colors → Tokens — Typography → Tokens — Spacing & Shapes → Surfaces → Components → Do's and Don'ts → Agent Prompt Guide → Quick Start.
+
+Surfaces table is required — documents the page background (--neutral-50), card surface (--neutral-white), brand tint (--primary-50), and overlay in a single scannable table.
+
+Agent Prompt Guide replaces generic "Starter Prompts" — each example references actual token names and the React component API (e.g., <Input prefix="Rp" />) so agents can generate valid code without guessing prop names.
+
+Quick Start CSS block — a copy-paste :root { } block at the end covers all color, layout, and typography tokens. Useful for bootstrapping a new project without reading the full spec.
+
+DESIGN.md (in specs.ts) uses markdown tables with backtick-escaped code spans (\`--token\`).
+llms.txt (in public/) uses plain key: value — role format (no markdown tables) since it is fetched as raw text by agents and must parse cleanly without a markdown renderer.
+
+Both files are maintained manually in sync — a future task is to generate llms.txt from specs.ts to guarantee they share the same source of truth (see migration path item 3 above).

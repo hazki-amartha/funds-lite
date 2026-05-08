@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useEffect, useRef, type ReactNode } from 'react'
 import {
   CLAUDE_PROMPT,
@@ -133,12 +134,15 @@ export default function ManifestPage() {
       {/* ── Sidebar ─────────────────────────────────────────── */}
       <aside className="sidebar">
         <div className="sidebar-logo">
-          <div className="logo-mark">
-            <svg viewBox="0 0 16 16"><path d="M8 1L15 13H1L8 1Z" /></svg>
-          </div>
-          <div>
-            <div className="logo-text">FunDS Lite</div>
-            <div className="logo-sub">v1.0.0 · 2026-04</div>
+          <div className="sidebar-logo-lockup">
+            <Image
+              className="sidebar-logo-image"
+              src="/logo.svg"
+              alt="FunDS Lite"
+              width={235}
+              height={33}
+              priority
+            />
           </div>
         </div>
 
