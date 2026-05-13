@@ -208,6 +208,96 @@ Variant token map:
 Radius: 12px | Border: 1px solid var(--neutral-200) | Background: var(--neutral-white) | Padding: 12px
 Never nest cards. Use to group related fund information.
 
+### Toggle
+Shape: pill track + circular thumb | Sizes: sm (32x20 / thumb 16) | md (44x24 / thumb 20)
+States: off | on (check icon) | disabled
+Implementation: src/funds-lite/components/Toggle.tsx
+React API: <Toggle size="sm" label="Remember me" helperText="Save my login details for next time." defaultChecked />
+Props: size, label, helperText — accepts native checkbox props
+
+Token map:
+- off:           track var(--neutral-400), thumb var(--neutral-white)
+- on:            track var(--primary-500), thumb var(--neutral-white) + check
+- disabled-off:  track var(--neutral-200), thumb dim
+- disabled-on:   track var(--neutral-200), thumb dim with check
+- focus-visible: 2px white + 4px var(--primary-200) ring around track
+
+### Selectable Card
+Shape: card (rounded-8) with right-side radio indicator
+Radius: 8px | Padding: sm 12px | md 16px | Border: 1px var(--neutral-200)
+States: enabled | active (border var(--primary-500), bg var(--primary-50)) | disabled
+Implementation: src/funds-lite/components/SelectableCard.tsx
+React API: <SelectableCard title="..." description="..." inputType="radio" name="plan" />
+Props: size, title, description, prefixIcon, secondary (right-aligned double content), slot, ribbon, inputType (radio | checkbox)
+
+Token map:
+- title:       text-14 weight 700 var(--neutral-900)
+- description: text-12 weight 500 var(--neutral-600)
+- prefixIcon:  32x32 var(--primary-50) bg with var(--primary-500) icon
+- slot:        inline rect, var(--primary-50) bg, var(--primary-500) text
+- ribbon:      var(--red-500) bg, white text, 10px / 700, top-right anchored
+- indicator:   16x16 circle, active dot var(--primary-500)
+
+### Modal
+Surface: white card on rgba(17, 25, 40, 0.8) overlay
+Radius: 12px | Padding: 16px | Sizes: sm 320px | md 400px (default) | lg 560px
+Variants: default (general content) | dialog (predefined w/ intent icon)
+Intents: success | warning | error | info — green | orange | red | blue 500
+Implementation: src/funds-lite/components/Modal.tsx
+React API: <Modal open={open} onClose={fn} title="Title" description="..." primaryAction={<Button>CTA</Button>} secondaryAction={<Button variant="ghost">Cancel</Button>} />
+Props: open, onClose, size, variant, intent, title, description, slot, primaryAction, secondaryAction, hideClose
+
+Token map:
+- overlay:    rgba(17, 25, 40, 0.8)
+- title:      text-16 / 700 var(--neutral-900)
+- description: text-14 / 500 var(--neutral-600)
+- close:      24x24 button, neutral-600 → neutral-900 on hover
+- slot:       var(--primary-50) bg, var(--primary-500) text, 8px radius
+- actions:    bottom row, right-aligned, 8px gap
+
+### Bottom Sheet
+Surface: white sheet anchored bottom, 12px top radius, on rgba(17, 25, 40, 0.8) overlay
+Padding: 16px | Sizes: sm (default, mobile 420px) | md (responsive 560px) | fullscreen (100vh, flat top)
+Variants: 5 predefined slot layouts (slot above/below + text-only + title-only + description-only)
+Implementation: src/funds-lite/components/BottomSheet.tsx
+React API: <BottomSheet open={open} onClose={fn} title="..." description="..." slot={<Slot />} primaryAction={...} secondaryAction={...} />
+Props: open, onClose, size, title, description, slot, slotPosition (above | below), primaryAction, secondaryAction, hideClose
+
+Token map:
+- grip:       32x4 var(--neutral-200) pill, centered top
+- close:      24x24 top-left, neutral-900
+- slot:       var(--primary-50) bg, var(--primary-500) text, 8px radius
+- actions:    row at bottom, equal-width, 8px gap
+
+### Navigation Bar
+Surface: bottom tab bar — white bg, 1px top border var(--neutral-200), 8px padding
+Layout: equal-width tabs, column flex (icon + label), 8px padding per tab
+States: enabled (var(--neutral-600)) | active (var(--primary-500), label weight 700)
+Implementation: src/funds-lite/components/NavigationBar.tsx
+React API: <NavigationBar items={[{ id, label, icon, active, badge, feature, onClick }]} />
+Props: items[] — each supports active, badge, feature, onClick
+
+Token map:
+- icon:       24x24
+- label:      text-10 / 500 (700 when active)
+- active:     var(--primary-500)
+- enabled:    var(--neutral-600)
+- feature:    40x40 var(--primary-500) circle, lifted (-16px margin-top), white icon
+- badge:      var(--red-500) bg, white text, 2px white ring, 10px / 700
+
+### Navigation Header
+Surface: top app bar — 48px height, 16px horizontal padding
+Variants: light (var(--neutral-white), var(--neutral-200) bottom border) | dark (var(--neutral-900), white text, no border)
+Implementation: src/funds-lite/components/NavigationHeader.tsx
+React API: <NavigationHeader title="Title here" onBack={fn} trailingIcons={[icon1, icon2]} link="Bantuan" onLinkClick={fn} />
+Props: title, variant, onBack, hideBack, trailingIcons (max 2), link, onLinkClick, showStatusBar
+
+Token map:
+- title:      text-16 / 700, inherits color (neutral-900 light / white dark)
+- back:       24x24, inherits color
+- trailing:   24x24 icons (max 2) OR link button text-14 / 700 var(--primary-500) light / var(--primary-300) dark
+- statusbar:  optional 24px row above header for mobile mocks (9:41 + signal/wifi/battery)
+
 ---
 
 ## DO / DON'T GUARDRAILS

@@ -304,6 +304,103 @@ Shape: pill (9999px). Padding: 3px 10px. Font: 12px / weight 500.
 Radius: 12px. Border: 1px solid \`--neutral-200\`. Background: \`--neutral-white\`. Padding: 12px.
 Never nest cards. Use cards to group related fund information.
 
+### Toggle
+**Role:** Binary on/off switch for a setting
+
+Shape: pill track + circular thumb. On state shows check icon and \`--primary-500\` track.
+
+Implementation: \`src/funds-lite/components/Toggle.tsx\`
+React API: \`<Toggle size="sm" label="Remember me" helperText="Save my login details for next time." defaultChecked />\`
+Props: \`size = sm | md\` · \`label\` · \`helperText\` · accepts native checkbox props (\`checked\`, \`defaultChecked\`, \`disabled\`, \`onChange\`).
+
+| State | Track bg | Thumb |
+|-------|----------|-------|
+| off | \`--neutral-400\` | \`--neutral-white\` |
+| on | \`--primary-500\` | \`--neutral-white\` + check |
+| disabled (off) | \`--neutral-200\` | \`--neutral-50\` |
+| disabled (on) | \`--neutral-200\` | \`--neutral-50\` + dim check |
+
+Sizes: sm (32×20 track / 16×16 thumb) · md (44×24 track / 20×20 thumb)
+Focus ring: 2px white + 4px \`--primary-200\` around track.
+
+### Selectable Card
+**Role:** Card-shaped radio / checkbox — selection via tapping the whole card
+
+Radius 8px. Border: 1px solid \`--neutral-200\`. Active state shifts border to \`--primary-500\` and background to \`--primary-50\`. Indicator (16px radio dot) sits on the right.
+
+Implementation: \`src/funds-lite/components/SelectableCard.tsx\`
+React API: \`<SelectableCard title="..." description="..." inputType="radio" name="plan" />\`
+Props: \`size = sm | md\` · \`title\` · \`description\` · \`prefixIcon\` · \`secondary\` (right-aligned double content) · \`slot\` (swappable inline component) · \`ribbon\` · \`inputType = radio | checkbox\` · accepts native input props.
+
+| State | Border | Background | Indicator |
+|-------|--------|------------|-----------|
+| enabled | \`--neutral-200\` | white | empty circle |
+| active | \`--primary-500\` | \`--primary-50\` | primary dot |
+| disabled | \`--neutral-200\` | \`--neutral-50\` | dim circle |
+
+Variants: with double content (secondary right-aligned) · with prefix icon (32px primary-50 circle) · with component slot (use \`slot\` prop) · promo card (combine with badge/ribbon).
+Use the ribbon prop for "Paling Untung"-style overlays.
+
+### Modal
+**Role:** Temporary dialog window on top of the main content
+
+Surface: white card, 12px radius, 16px padding, anchored center over \`rgba(17, 25, 40, 0.8)\` overlay. Has only one visual state — open or closed.
+
+Implementation: \`src/funds-lite/components/Modal.tsx\`
+React API: \`<Modal open={open} onClose={...} title="Title" description="..." primaryAction={<Button>CTA</Button>} secondaryAction={<Button variant="ghost">Cancel</Button>} />\`
+Props: \`open\` · \`onClose\` · \`size = sm | md | lg\` · \`variant = default | dialog\` · \`intent = success | warning | error | info\` (dialog only) · \`title\` · \`description\` · \`slot\` (swappable content above description) · \`primaryAction\` · \`secondaryAction\` · \`hideClose\`.
+
+| Variant | Notes |
+|---------|-------|
+| default | General content with title + body + optional swappable slot |
+| dialog | Predefined content with intent icon (success / warning / error / info) |
+
+Sizes: sm 320px · md 400px (default) · lg 560px. Closing supports Escape key and overlay click.
+
+### Bottom Sheet
+**Role:** Mobile sheet that slides up from the bottom
+
+Surface: white sheet anchored to bottom, 12px top radius, 16px padding. Always includes a grip handle. Closes on Escape or overlay tap.
+
+Implementation: \`src/funds-lite/components/BottomSheet.tsx\`
+React API: \`<BottomSheet open={open} onClose={...} title="Title" description="..." slot={<Component />} primaryAction={<Button>Lanjutkan</Button>} secondaryAction={<Button variant="outline">Tutup</Button>} />\`
+Props: \`open\` · \`onClose\` · \`size = sm | md | fullscreen\` · \`title\` · \`description\` · \`slot\` (swappable visual block) · \`slotPosition = above | below\` · \`primaryAction\` · \`secondaryAction\` · \`hideClose\`.
+
+Sizes: sm — default mobile width 420px (use this 95% of the time) · md — responsive 560px · fullscreen — full viewport height with flat top.
+Five predefined variants in spec map to slot-above + slot-below + text-only + title-only + description-only combinations.
+
+### Navigation Bar
+**Role:** Bottom tab bar for primary app navigation
+
+Surface: white background, 1px top border (\`--neutral-200\`). Equal-width tabs in a row, icon + 10px uppercase-equivalent label.
+
+Implementation: \`src/funds-lite/components/NavigationBar.tsx\`
+React API: \`<NavigationBar items={[{ id, label, icon, active, badge, feature, onClick }]} />\`
+Props: each item supports \`active\` (primary-500 color, weight 700 label), \`badge\` (red dot or count over icon), \`feature\` (40px primary-500 lifted circle — use for center action like Scan).
+
+| State | Color | Label weight |
+|-------|-------|--------------|
+| enabled | \`--neutral-600\` | 500 |
+| active | \`--primary-500\` | 700 |
+
+Badge: red-500 bg with white text and 2px white border ring around icon corner.
+
+### Navigation Header
+**Role:** Top app bar — back, title, optional trailing icons or CTA link
+
+Height: 48px. Padding: 16px horizontal. White surface with neutral-200 bottom border; dark variant uses neutral-900 with white text.
+
+Implementation: \`src/funds-lite/components/NavigationHeader.tsx\`
+React API: \`<NavigationHeader title="Title here" onBack={...} trailingIcons={[icon1, icon2]} link="Bantuan" onLinkClick={...} />\`
+Props: \`title\` · \`variant = light | dark\` · \`onBack\` · \`hideBack\` · \`trailingIcons\` (max 2) · \`link\` · \`onLinkClick\` · \`showStatusBar\` (renders iOS-style status bar above header for mocks).
+
+| Variant | Bg | Text | Border |
+|---------|----|------|--------|
+| light | \`--neutral-white\` | \`--neutral-900\` | \`--neutral-200\` bottom |
+| dark | \`--neutral-900\` | \`--neutral-white\` | none |
+
+States: one state only — no hover. Trailing slot accepts up to 2 icons OR a link button (text-14 weight 700, \`--primary-500\` light / \`--primary-300\` dark).
+
 ---
 
 ## Do's and Don'ts
@@ -471,10 +568,17 @@ ${LAYOUT_PATTERNS.map((group) => `${group.name}:\n${group.tokens.map((token) => 
 - Variants: text input, select, textarea, tap area`,
   badges: `## Badges
 
+- Implementation: src/funds-lite/components/Badge.tsx
+- Styles: src/funds-lite/components/styles.css (+ base classes in app/globals.css)
+- React API: <Badge intent="primary" variant="subtle" size="sm">Label</Badge>
 - Shape: pill (9999px)
-- Padding: 3px 10px
-- Font: 12px / 500
-- Variants: primary, blue, green, orange, red, yellow, neutral`,
+- Padding: sm 3px 10px · md 4px 12px
+- Font: sm 12px / 500 · md 13px / 500
+- Intent: primary, blue, green, orange, red, yellow, neutral
+- Variant: subtle (default, tinted bg) · solid (saturated bg, white text) · outline (white bg, colored border+text) · inverted (white bg, primary-500 border+text)
+- Size: sm (default), md
+- Icon slots: leadingIcon, trailingIcon, dot
+- Use Inverted for emphasis on filled/colored backgrounds`,
   cards: `## Cards
 
 - Radius: 12px
@@ -483,6 +587,77 @@ ${LAYOUT_PATTERNS.map((group) => `${group.name}:\n${group.tokens.map((token) => 
 - Padding: 12px
 - Use cards to group related information
 - Never nest cards`,
+  toggles: `## Toggles
+
+- Implementation: src/funds-lite/components/Toggle.tsx
+- Styles: src/funds-lite/components/styles.css
+- React API: <Toggle size="sm" label="Remember me" helperText="Save my login details for next time." defaultChecked />
+- Shape: pill track (9999px) with circular thumb
+- Sizes: sm (default) — 32x20 track · md — 44x24 track
+- States: off · on (shows check icon, primary-500 bg) · disabled
+- Variants: default (track only) · with label · with label + help text
+- Focus ring: 2px white + 4px primary-200 on track`,
+  'selectable-cards': `## Selectable Cards
+
+- Implementation: src/funds-lite/components/SelectableCard.tsx
+- Styles: src/funds-lite/components/styles.css
+- React API: <SelectableCard title="This is the card title" description="Enter description here, max. 2 lines" inputType="radio" name="plan" />
+- Shape: rectangular card (8px radius)
+- Border: 1px var(--neutral-200), active 1px var(--primary-500) with primary-50 bg
+- Padding: sm 12px · md 16px
+- States: enabled · active · disabled (plus -hover variants)
+- Title: 14px / 700 / neutral-900
+- Description: 12px / 500 / neutral-600
+- Variants: with double content (secondary slot, right-aligned) · with prefix icon · with component slot · promo card
+- Combine with ribbon for highlights (use props.ribbon)
+- Indicator: 16x16 radio dot on right (or use inputType="checkbox")`,
+  modals: `## Modals
+
+- Implementation: src/funds-lite/components/Modal.tsx
+- Styles: src/funds-lite/components/styles.css
+- React API: <Modal open={open} onClose={...} title="Title" description="..." primaryAction={<Button>CTA</Button>} />
+- Overlay: rgba(17, 25, 40, 0.8)
+- Modal: white bg, 12px radius, 16px padding
+- Sizes: sm 320px · md 400px (default) · lg 560px
+- Variants: default (general content) · dialog (predefined content, supports intent icon)
+- Dialog intents: success · warning · error · info (green / orange / red / blue 500 icon)
+- States: 1 state only — no hover or interaction beyond open/close
+- Close: top-right X (use hideClose to omit)
+- Actions: bottom row, right-aligned; secondaryAction renders first`,
+  'bottom-sheets': `## Bottom Sheets
+
+- Implementation: src/funds-lite/components/BottomSheet.tsx
+- Styles: src/funds-lite/components/styles.css
+- React API: <BottomSheet open={open} onClose={...} title="Title" description="..." slot={<Slot />} primaryAction={...} secondaryAction={...} />
+- Overlay: rgba(17, 25, 40, 0.8) · anchored bottom
+- Sheet: white bg, 12px top radius, 16px padding
+- Sizes: sm (default, mobile-width 420px) · md (responsive 560px) · fullscreen (height 100vh, flat top radius)
+- Variants: 5 predefined slot layouts (slot above/below/inline + with-or-without title/description)
+- Always include grip indicator (top center handle)
+- Close button: top-left X (use hideClose to omit)
+- Actions: row at bottom, equal-width buttons`,
+  'navigation-bars': `## Navigation Bars
+
+- Implementation: src/funds-lite/components/NavigationBar.tsx
+- Styles: src/funds-lite/components/styles.css
+- React API: <NavigationBar items={[{ id, label, icon, active, badge, feature, onClick }]} />
+- Surface: bottom tab bar — white bg, 1px top border (--neutral-200)
+- Layout: equal-width tabs, column flex (icon + label), 8px padding
+- States: enabled (--neutral-600) · active (--primary-500, label 700)
+- Tab icon: 24x24 · Label: text-10 weight 500 (700 when active)
+- Feature tab: 40x40 primary-500 circle, lifted (-16px margin-top) — use for center actions like Scan
+- Badge support: numerical badge on icon (red-500 bg, white text, neutral-white border)`,
+  'navigation-headers': `## Navigation Headers
+
+- Implementation: src/funds-lite/components/NavigationHeader.tsx
+- Styles: src/funds-lite/components/styles.css
+- React API: <NavigationHeader title="Title here" onBack={...} trailingIcons={[...]} link="Bantuan" onLinkClick={...} />
+- Surface: top app bar — 48px height, 16px horizontal padding
+- Variants: light (white bg, neutral-200 bottom border) · dark (neutral-900 bg, white text)
+- Layout: back arrow (24x24) + title (text-16 / 700) + trailing slot
+- Trailing slot: up to 2 icons (24x24) or a link button (text-14 / 700, primary-500)
+- Optional status bar row (9:41 + signal/wifi/battery) above header for mobile mocks via showStatusBar
+- States: 1 state — no hover interaction`,
   prompts: `## System Prompts
 
 Claude System Prompt:

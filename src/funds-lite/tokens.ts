@@ -149,5 +149,8 @@ export const TOKENS = [
 
 export const NAV_SECTIONS = [
   'overview', 'colors', 'typography', 'spacing',
-  'buttons', 'inputs', 'badges', 'cards', 'prompts', 'llms',
+  'buttons', 'inputs', 'badges', 'cards',
+  'toggles', 'selectable-cards', 'modals', 'bottom-sheets',
+  'navigation-bars', 'navigation-headers',
+  'prompts', 'llms',
 ] as const
