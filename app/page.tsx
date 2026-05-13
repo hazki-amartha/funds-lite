@@ -369,6 +369,9 @@ export default function ManifestPage() {
 
           <div className="divider" />
 
+          {/* ── Components (2-col grid) ───────────────────────── */}
+          <div className="comp-grid">
+
           {/* ── Buttons ──────────────────────────────────────── */}
           <div className="section" id="buttons">
             <div className="eyebrow"><span className="eyebrow-num">04 ·</span>Components</div>
@@ -748,6 +751,8 @@ export default function ManifestPage() {
               </div>
             </div>
           </div>
+
+          </div>{/* end .comp-grid */}
 
           <div className="divider" />
 

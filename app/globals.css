@@ -52,7 +52,7 @@
   --sidebar-w: 220px;
 }
 
-html { font-family: var(--font); font-size: 14px; color: var(--neutral-900); background: var(--neutral-50); }
+html { font-family: var(--font); font-size: 14px; color: var(--neutral-900); background: #F3F6FD; }
 body { display: flex; min-height: 100vh; }
 
 /* ── Sidebar (manifest-1 style) ── */
@@ -316,7 +316,7 @@ body { display: flex; min-height: 100vh; }
 .comp-section { margin-bottom: 28px; }
 .comp-label { font-size: 10px; font-weight: 600; color: var(--neutral-500); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
 .comp-stage {
-  background: var(--neutral-50); border: 1px solid var(--neutral-200);
+  background: #F3F6FD; border: 1px solid var(--neutral-200);
   border-radius: 12px; padding: 24px;
   display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
 }
@@ -396,6 +396,15 @@ body { display: flex; min-height: 100vh; }
 .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
 
+/* ── Components 2-col grid ── */
+.comp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.comp-grid .section { margin-bottom: 0; }
+
 /* ── Responsive ── */
 @media (max-width: 900px) {
   .sidebar { display: none; }
@@ -403,6 +412,6 @@ body { display: flex; min-height: 100vh; }
   .content { padding: 32px 20px; }
   .section { padding: 22px 18px 24px; border-radius: 16px; }
   .section-title { font-size: 24px; }
-  .g2, .g3 { grid-template-columns: 1fr; }
+  .g2, .g3, .comp-grid { grid-template-columns: 1fr; }
   .intro-title { font-size: 28px; }
 }
