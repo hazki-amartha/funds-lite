@@ -9,8 +9,8 @@ import type { Config } from 'tailwindcss'
 
 const config: Config = {
   content: [
-    './packages/components/src/**/*.{ts,tsx}',
-    './apps/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
   ],
   theme: {
     // -------------------------------------------------------------------------
@@ -48,13 +48,13 @@ const config: Config = {
     },
 
     fontSize: {
-      '10': ['10px', { lineHeight: '150%', letterSpacing: '0px' }],
+      '10': ['10px', { lineHeight: '150%', letterSpacing: '0.06em' }],
       '12': ['12px', { lineHeight: '150%', letterSpacing: '0px' }],
       '14': ['14px', { lineHeight: '150%', letterSpacing: '0px' }],
       '16': ['16px', { lineHeight: '150%', letterSpacing: '0px' }],
       '18': ['18px', { lineHeight: '150%', letterSpacing: '0px' }],
-      '20': ['20px', { lineHeight: '100%', letterSpacing: '0px' }],
-      '24': ['24px', { lineHeight: '100%', letterSpacing: '0px' }],
+      '20': ['20px', { lineHeight: '100%', letterSpacing: '-0.01em' }],
+      '24': ['24px', { lineHeight: '100%', letterSpacing: '-0.02em' }],
     },
 
     fontFamily: {

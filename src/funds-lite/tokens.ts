@@ -67,26 +67,23 @@ export const COLOR_SCALES: Record<string, { scale: string; hex: string }[]> = {
 }
 
 export const TYPE_SCALE = [
-  { cls: 'text-24', spec: '24px / 700 / −0.02em', size: '24px', weight: 700, ls: '-0.02em', sample: 'Heading 24', uppercase: false },
-  { cls: 'text-20', spec: '20px / 700 / −0.01em', size: '20px', weight: 700, ls: '-0.01em', sample: 'Heading 20', uppercase: false },
-  { cls: 'text-18', spec: '18px / 500 / 0', size: '18px', weight: 500, ls: '0', sample: 'Body 18 — primary reading size for dashboards.', uppercase: false },
-  { cls: 'text-16', spec: '16px / 500 / 0', size: '16px', weight: 500, ls: '0', sample: 'Body 16 — secondary paragraphs and descriptions.', uppercase: false },
-  { cls: 'text-14', spec: '14px / 500 / 0', size: '14px', weight: 500, ls: '0', sample: 'Body 14 — compact data tables and labels.', uppercase: false },
-  { cls: 'text-12', spec: '12px / 500 / 0', size: '12px', weight: 500, ls: '0', sample: 'Body 12 — caption and helper text.', uppercase: false },
+  { cls: 'text-24', spec: '24px / 700 / −0.02em', size: '24px', weight: 700, ls: '-0.02em', sample: 'Heading 24 — Hero title', uppercase: false },
+  { cls: 'text-20', spec: '20px / 700 / −0.01em', size: '20px', weight: 700, ls: '-0.01em', sample: 'Heading 20 — Mobile page title', uppercase: false },
+  { cls: 'text-18', spec: '18px / 500 / 0', size: '18px', weight: 500, ls: '0', sample: 'Body 18 — Primary reading size for dashboards.', uppercase: false },
+  { cls: 'text-16', spec: '16px / 500 / 0', size: '16px', weight: 500, ls: '0', sample: 'Body 16 — Secondary paragraphs and descriptions.', uppercase: false },
+  { cls: 'text-14', spec: '14px / 500 / 0', size: '14px', weight: 500, ls: '0', sample: 'Body 14 — Body text for mobile, compact data tables and labels.', uppercase: false },
+  { cls: 'text-12', spec: '12px / 500 / 0', size: '12px', weight: 500, ls: '0', sample: 'Body 12 — Caption and helper text.', uppercase: false },
   { cls: 'text-10', spec: '10px / 500 / +0.06em', size: '10px', weight: 500, ls: '0.06em', sample: 'OVERLINE / MICRO LABEL', uppercase: true },
 ]
 
 export const SPACINGS = [
   { v: '0', px: '0px', r: '0' },
-  { v: '2', px: '2px', r: '0.125rem' },
   { v: '4', px: '4px', r: '0.25rem' },
   { v: '8', px: '8px', r: '0.5rem' },
   { v: '12', px: '12px', r: '0.75rem' },
   { v: '16', px: '16px', r: '1rem' },
   { v: '20', px: '20px', r: '1.25rem' },
-  { v: '24', px: '24px', r: '1.5rem' },
   { v: '32', px: '32px', r: '2rem' },
-  { v: '40', px: '40px', r: '2.5rem' },
   { v: '48', px: '48px', r: '3rem' },
 ]
 
@@ -151,6 +148,6 @@ export const NAV_SECTIONS = [
   'overview', 'colors', 'typography', 'spacing',
   'buttons', 'inputs', 'badges', 'cards',
   'toggles', 'selectable-cards', 'modals', 'bottom-sheets',
-  'navigation-bars', 'navigation-headers',
+  'navigation-bars',
   'prompts', 'llms',
 ] as const

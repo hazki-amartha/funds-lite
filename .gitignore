@@ -1,5 +1,8 @@
 node_modules/
+package/.npmrc
 working_local/
 .DS_Store
 reference/
 raw/
+.next/
+*.tsbuildinfo

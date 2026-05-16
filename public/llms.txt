@@ -103,6 +103,7 @@ text-14: 14px / weight 500 / letter-spacing 0        → Compact data tables and
 text-12: 12px / weight 500 / letter-spacing 0        → Body / caption / helper text
 text-10: 10px / weight 500 / letter-spacing +0.06em  → Overline / micro (UPPERCASE only)
 
+
 ---
 
 ## TOKENS — SPACING & SHAPES
@@ -205,6 +206,7 @@ Variant token map:
 - neutral: bg var(--neutral-50) (#F9FAF8),  text var(--neutral-600) (#6B7280)
 
 ### Card
+Role: Surface container for grouped information
 Radius: 12px | Border: 1px solid var(--neutral-200) | Background: var(--neutral-white) | Padding: 12px
 Never nest cards. Use to group related fund information.
 
