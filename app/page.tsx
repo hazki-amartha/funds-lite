@@ -1,7 +1,8 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { Home, PlusCircle, ScanLine, Wallet, FileText } from 'lucide-react'
 import {
   CLAUDE_PROMPT,
   Badge,
@@ -85,11 +86,11 @@ export default function ManifestPage() {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
-  function renderSectionHeader(sectionId: keyof typeof SECTION_SPECS, title: string, sub: ReactNode) {
+  function renderSectionHeader(sectionId: keyof typeof SECTION_SPECS, eyebrowNum: string, eyebrowCat: string, title: string, sub: ReactNode) {
     return (
       <div className="section-header">
-        <div className="section-title-row">
-          <h2 className="section-title">{title}</h2>
+        <div className="section-eyebrow-row">
+          <div className="eyebrow"><span className="eyebrow-num">{eyebrowNum}</span>{eyebrowCat}</div>
           <button
             className="section-copy"
             type="button"
@@ -117,7 +118,20 @@ export default function ManifestPage() {
             </svg>
           </button>
         </div>
+        <h2 className="section-title">{title}</h2>
         <p className="section-sub">{sub}</p>
+      </div>
+    )
+  }
+
+  function stageWrap(label: string, variants: string, children: ReactNode, style?: CSSProperties) {
+    return (
+      <div className="comp-stage-wrap">
+        <div className="comp-stage" style={style}>{children}</div>
+        <div className="comp-stage-footer">
+          <span className="comp-stage-lbl">{label}</span>
+          {variants && <span className="comp-stage-variants">{variants}</span>}
+        </div>
       </div>
     )
   }
@@ -180,8 +194,7 @@ export default function ManifestPage() {
           <button className="nav-item" data-section="selectable-cards" onClick={() => scrollTo('selectable-cards')}><span />Selectable Cards</button>
           <button className="nav-item" data-section="modals" onClick={() => scrollTo('modals')}><span />Modals</button>
           <button className="nav-item" data-section="bottom-sheets" onClick={() => scrollTo('bottom-sheets')}><span />Bottom Sheets</button>
-          <button className="nav-item" data-section="navigation-bars" onClick={() => scrollTo('navigation-bars')}><span />Navigation Bars</button>
-          <button className="nav-item" data-section="navigation-headers" onClick={() => scrollTo('navigation-headers')}><span />Navigation Headers</button>
+          <button className="nav-item" data-section="navigation-bars" onClick={() => scrollTo('navigation-bars')}><span />Navigation</button>
         </div>
         <div className="nav-section">
           <div className="nav-label">AI Tools</div>
@@ -192,28 +205,6 @@ export default function ManifestPage() {
 
       {/* ── Main ────────────────────────────────────────────── */}
       <main className="main">
-        {/* Topbar */}
-        <div className="topbar">
-          <div className="topbar-left">
-            <span className="topbar-title">Design System Manifest</span>
-            <span className="topbar-badge">v1.0.0</span>
-          </div>
-          <div className="topbar-actions">
-            <button className="tb-btn tb-btn-brand" onClick={downloadMd}>
-              Download DESIGN.md
-            </button>
-            <button className="tb-btn tb-btn-ghost" onClick={() => copyText(CLAUDE_PROMPT, 'Claude prompt copied!')}>
-              Copy AI Prompt
-            </button>
-            <button className="tb-btn tb-btn-ghost" onClick={() => copyText(CURSOR_RULES, '.cursorrules copied!')}>
-              Copy .cursorrules
-            </button>
-            <a className="tb-btn tb-btn-ghost" href="/llms.txt" target="_blank" rel="noopener">
-              View llms.txt
-            </a>
-          </div>
-        </div>
-
         <div className="content">
 
           {/* ── Overview ─────────────────────────────────────── */}
@@ -224,22 +215,29 @@ export default function ManifestPage() {
               Use this lightweight subset of FunDS to spin up high-fidelity mobile and dashboard features without the overhead of the full library.
               It contains the essential tokens and core components needed for quick iterations.
             </p>
-            <div className="meta-chips">
-              <div className="meta-chip">name · <strong>FunDS Lite</strong></div>
-              <div className="meta-chip">version · <strong>1.0.0</strong></div>
-              <div className="meta-chip">updated · <strong>2026-04</strong></div>
-              <div className="meta-chip">platform · <strong>AmarthaFin, NGMIS</strong></div>
+            <div className="topbar-actions">
+              <button className="tb-btn tb-btn-brand" onClick={downloadMd}>
+                Download DESIGN.md
+              </button>
+              <button className="tb-btn tb-btn-ghost" onClick={() => copyText(CLAUDE_PROMPT, 'AI prompt copied!')}>
+                Copy Prompt
+              </button>
+              <button className="tb-btn tb-btn-ghost" onClick={() => copyText(CURSOR_RULES, '.cursorrules copied!')}>
+                Copy .cursorrules
+              </button>
+              <a className="tb-btn tb-btn-ghost" href="/llms.txt" target="_blank" rel="noopener">
+                View llms.txt
+              </a>
             </div>
           </div>
 
           {/* ── Colors ───────────────────────────────────────── */}
           <div className="section" id="colors">
-            <div className="eyebrow"><span className="eyebrow-num">01 ·</span>Foundations</div>
-            {renderSectionHeader('colors', 'Colors', 'Hover a tile to see hex · click to copy')}
+            {renderSectionHeader('colors', '01 ·', 'Foundations', 'Colors', 'Hover a tile to see hex · click to copy')}
             {Object.entries(COLOR_SCALES).map(([name, scale]) => (
               <div className="color-row" key={name}>
                 <span className="color-label">{name}</span>
-                {scale.map(({ scale, hex }) => (
+                {scale.filter(({ scale: s }) => !(name === 'Brand' && s === '300') && !(name === 'Neutral' && s === 'white')).map(({ scale, hex }) => (
                   <div className="color-chip" key={`${name}-${scale}`}>
                     <div className="color-scale">{scale}</div>
                     <div
@@ -255,7 +253,7 @@ export default function ManifestPage() {
             ))}
             <div className="comp-section" style={{ marginTop: 28, marginBottom: 0 }}>
               <div className="comp-label">Token reference</div>
-              <div style={{ background: 'var(--neutral-white)', border: '1px solid var(--neutral-200)', borderRadius: 12, overflow: 'hidden' }}>
+              <div style={{ background: 'var(--fds-bg-elev)', border: '1px solid var(--fds-line)', borderRadius: 8, overflow: 'hidden' }}>
                 <table className="tk-tbl">
                   <thead>
                     <tr><th>Category</th><th>Token</th><th>Value</th><th>Usage</th></tr>
@@ -282,89 +280,103 @@ export default function ManifestPage() {
 
           {/* ── Typography ───────────────────────────────────── */}
           <div className="section" id="typography">
-            <div className="eyebrow"><span className="eyebrow-num">02 ·</span>Foundations</div>
-            {renderSectionHeader('typography', 'Typography', <>Inter · weights <code style={{ fontFamily: 'var(--mono)', fontSize: 12, background: 'var(--primary-50)', color: 'var(--primary-500)', padding: '2px 6px', borderRadius: 4 }}>500</code> and <code style={{ fontFamily: 'var(--mono)', fontSize: 12, background: 'var(--primary-50)', color: 'var(--primary-500)', padding: '2px 6px', borderRadius: 4 }}>700</code> only</>)}
-            <table className="type-tbl">
-              <tbody>
-                {TYPE_SCALE.map((t) => (
-                  <tr key={t.cls}>
-                    <td className="type-meta">
-                      <span className="type-cls">{t.cls}</span>
-                      <span className="type-spec-txt">{t.spec}</span>
-                    </td>
-                    <td>
-                      <span style={{
-                        fontSize: t.size,
-                        fontWeight: t.weight,
-                        letterSpacing: t.ls,
-                        textTransform: t.uppercase ? 'uppercase' : 'none',
-                      }}>
-                        {t.sample}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {renderSectionHeader('typography', '02 ·', 'Foundations', 'Typography', <>Inter · weights <code style={{ fontFamily: 'var(--mono)', fontSize: 12, background: 'var(--primary-50)', color: 'var(--primary-500)', padding: '2px 6px', borderRadius: 4 }}>500</code> and <code style={{ fontFamily: 'var(--mono)', fontSize: 12, background: 'var(--primary-50)', color: 'var(--primary-500)', padding: '2px 6px', borderRadius: 4 }}>700</code> only</>)}
+            <div style={{ border: '1px solid var(--fds-line)', borderRadius: 8, overflow: 'hidden' }}>
+              {TYPE_SCALE.map((t, i) => (
+                <div key={t.cls} style={{ padding: '10px 16px 12px', borderBottom: i < TYPE_SCALE.length - 1 ? '1px solid var(--fds-line)' : 'none' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                    <span className="type-cls">{t.cls}</span>
+                    <span className="type-spec-txt">{t.spec}</span>
+                  </div>
+                  <div style={{
+                    fontSize: t.size,
+                    fontWeight: t.weight,
+                    letterSpacing: t.ls,
+                    textTransform: t.uppercase ? 'uppercase' : 'none',
+                    lineHeight: 1.2,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}>
+                    {t.sample}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="divider" />
 
           {/* ── Spacing & Sizing ─────────────────────────────── */}
           <div className="section" id="spacing">
-            <div className="eyebrow"><span className="eyebrow-num">03 ·</span>Foundations</div>
-            {renderSectionHeader('spacing', 'Spacing & Sizing', '4px base rhythm · click row to copy px value')}
-            <div className="g2">
-              <div>
-                <div className="comp-label">Spacing scale</div>
-                <div className="spacing-rows">
-                  {SPACINGS.map((s) => (
-                    <div className="sp-row" key={s.v} onClick={() => copyText(s.px, `${s.px} copied!`)}>
-                      <div className="sp-label">space-{s.v}</div>
-                      <div className="sp-bar-wrap">
-                        <div className="sp-bar" style={{ width: Math.max(parseInt(s.px) || 0, 2) }} />
-                      </div>
-                      <div className="sp-class">p-{s.v} / m-{s.v}</div>
-                      <div className="sp-rem">{s.r}</div>
+            {renderSectionHeader('spacing', '03 ·', 'Foundations', 'Spacing & Sizing', '4px base rhythm · click row to copy px value')}
+            {(() => {
+              const spUsage: Record<string, string> = {
+                '8px':  'card-gap',
+                '12px': 'section-gap · card-padding',
+                '16px': 'page-padding-x · page-padding-top · topbar-padding-x',
+                '48px': 'topbar-height',
+              }
+              const radiiDemo = [
+                { k: '8',    v: '8px',  usage: 'inputs · tags' },
+                { k: '12',   v: '12px', usage: 'cards' },
+                { k: '16',   v: '16px', usage: 'modals · bottom sheets' },
+                { k: '20',   v: '20px', usage: '' },
+                { k: 'full', v: '∞',    usage: 'buttons · pills' },
+              ]
+              return (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                  <div>
+                    <div className="comp-label">Spacing scale</div>
+                    <div style={{ background: 'var(--fds-bg-elev)', border: '1px solid var(--fds-line)', borderRadius: 8, overflow: 'hidden' }}>
+                      <table className="tk-tbl">
+                        <thead>
+                          <tr><th>Token</th><th>px</th><th style={{ width: '160px' }}>Scale</th><th>rem</th><th>Usage</th></tr>
+                        </thead>
+                        <tbody>
+                          {SPACINGS.map((s) => (
+                            <tr key={s.v} onClick={() => copyText(s.px, `${s.px} copied!`)}>
+                              <td className="tk-key">space-{s.v}</td>
+                              <td className="tk-val">{s.px}</td>
+                              <td><div className="sp-bar" style={{ width: Math.max(parseInt(s.px) || 0, 2) }} /></td>
+                              <td className="tk-val">{s.r}</td>
+                              <td className="tk-desc">{spUsage[s.px] ?? ''}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <div className="comp-label">Border radius</div>
-                <div className="radius-grid">
-                  {RADII.map((r) => (
-                    <div className="r-card" key={r.k} onClick={() => copyText(r.v === '∞' ? '9999px' : r.v, `${r.v} copied!`)}>
-                      <div className="r-demo" style={{ borderRadius: r.v === '∞' ? '9999px' : r.v }} />
-                      <div className="r-val">{r.v}</div>
-                      <div className="r-cls">rounded-{r.k}</div>
+                  </div>
+                  <div>
+                    <div className="comp-label">Border radius</div>
+                    <div style={{ background: 'var(--fds-bg-elev)', border: '1px solid var(--fds-line)', borderRadius: 8, overflow: 'hidden' }}>
+                      <table className="tk-tbl">
+                        <thead>
+                          <tr><th>Token</th><th>Value</th><th>Preview</th><th>Usage</th></tr>
+                        </thead>
+                        <tbody>
+                          {radiiDemo.map((r) => {
+                            const px = r.v === '∞' ? '9999px' : r.v
+                            return (
+                              <tr key={r.k} onClick={() => copyText(px, `${px} copied!`)}>
+                                <td className="tk-key">rounded-{r.k}</td>
+                                <td className="tk-val">{r.v}</td>
+                                <td>
+                                  <div className="r-corner-wrap">
+                                    <div className="r-corner-shape" style={{ borderRadius: px }} />
+                                  </div>
+                                </td>
+                                <td className="tk-desc">{r.usage}</td>
+                              </tr>
+                            )
+                          })}
+                        </tbody>
+                      </table>
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div className="comp-section" style={{ marginTop: 28, marginBottom: 0 }}>
-              <div className="comp-label">Layout patterns</div>
-              <div style={{ background: 'var(--neutral-white)', border: '1px solid var(--neutral-200)', borderRadius: 12, overflow: 'hidden' }}>
-                <table className="tk-tbl">
-                  <thead>
-                    <tr><th>Pattern</th><th>Token</th><th>Value</th><th>Usage</th></tr>
-                  </thead>
-                  <tbody>
-                    {LAYOUT_PATTERNS.flatMap((group) =>
-                      group.tokens.map((token) => (
-                        <tr key={`${group.name}-${token.key}`} onClick={() => copyText(token.value, `${token.value} copied!`)}>
-                          <td style={{ fontSize: 12, color: 'var(--neutral-600)' }}>{group.name}</td>
-                          <td className="tk-key">{token.key}</td>
-                          <td className="tk-val">{token.value}</td>
-                          <td className="tk-desc">{token.note || 'Standard layout token'}</td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+              )
+            })()}
           </div>
 
           <div className="divider" />
@@ -374,21 +386,18 @@ export default function ManifestPage() {
 
           {/* ── Buttons ──────────────────────────────────────── */}
           <div className="section" id="buttons">
-            <div className="eyebrow"><span className="eyebrow-num">04 ·</span>Components</div>
-            {renderSectionHeader('buttons', 'Buttons', 'Trigger an action or event — four variants × five sizes')}
+            {renderSectionHeader('buttons', '04 ·', 'Components', 'Buttons', 'Trigger an action or event — four variants × five sizes')}
             <div className="comp-section">
-              <div className="comp-label">Variants</div>
-              <div className="comp-stage">
+              {stageWrap('variants', 'primary · secondary · outline · ghost · danger', <>
                 <Button>Primary</Button>
                 <Button variant="secondary">Secondary</Button>
                 <Button variant="outline">Tertiary</Button>
                 <Button variant="ghost">Ghost</Button>
                 <Button variant="danger">Destructive</Button>
-              </div>
+              </>)}
             </div>
             <div className="comp-section">
-              <div className="comp-label">States</div>
-              <div className="comp-stage">
+              {stageWrap('states', 'default · disabled', <>
                 <Button>Primary</Button>
                 <Button disabled>Disabled</Button>
                 <Button variant="secondary">Secondary</Button>
@@ -397,82 +406,52 @@ export default function ManifestPage() {
                 <Button variant="outline" disabled>Disabled</Button>
                 <Button variant="ghost">Ghost</Button>
                 <Button variant="ghost" disabled>Disabled</Button>
-              </div>
+              </>)}
             </div>
             <div className="comp-section">
-              <div className="comp-label">Sizes</div>
-              <div className="comp-stage">
+              {stageWrap('sizes', 'xs · sm · md · lg · xl', <>
                 <Button size="xs">XSmall</Button>
                 <Button size="sm">Small</Button>
                 <Button>Medium</Button>
                 <Button size="lg">Large</Button>
                 <Button size="xl">XLarge</Button>
-              </div>
+              </>)}
             </div>
           </div>
 
           {/* ── Inputs ───────────────────────────────────────── */}
           <div className="section" id="inputs">
-            <div className="eyebrow"><span className="eyebrow-num">05 ·</span>Components</div>
-            {renderSectionHeader('inputs', 'Inputs', 'Text field guidance from the April 28, 2025 FunDS spec: sizes, states, metadata, affixes, icons, and tap-area variants')}
-            <div className="comp-section">
-              <div className="comp-label">Sizes</div>
-              <div className="comp-stage" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 14 }}>
-                <Input label="Small" size="sm" placeholder="Placeholder" />
-                <Input label="Medium" placeholder="Placeholder" />
-                <Input label="Large" size="lg" placeholder="Placeholder" />
-              </div>
-            </div>
-            <div className="g2">
+            {renderSectionHeader('inputs', '05 ·', 'Components', 'Inputs', 'Text field guidance from the April 28, 2025 FunDS spec: sizes, states, metadata, affixes, icons, and tap-area variants')}
+            <div className="g3">
               <div>
-                <div className="comp-label">Core states</div>
-                <div className="comp-stage" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 14 }}>
+                {stageWrap('sizes', 'sm · md · lg', <>
+                  <Input label="Small" size="sm" placeholder="Placeholder" />
+                  <Input label="Medium" placeholder="Placeholder" />
+                  <Input label="Large" size="lg" placeholder="Placeholder" />
+                </>, { flexDirection: 'column', alignItems: 'stretch', gap: 14 })}
+              </div>
+              <div>
+                {stageWrap('states', 'default · filled · focus', <>
                   <Input label="Default" placeholder="Placeholder" />
                   <Input label="Filled" defaultValue="This is the input" readOnly />
                   <Input label="Typing" state="focus" defaultValue="Placeholder|" readOnly />
-                </div>
+                </>, { flexDirection: 'column', alignItems: 'stretch', gap: 14 })}
               </div>
               <div>
-                <div className="comp-label">Prefix, suffix, icons</div>
-                <div className="comp-stage" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 14 }}>
+                {stageWrap('affixes', 'prefix · suffix · icon', <>
                   <Input label="Prefix" prefix="Rp" prefixInteractive prefixButtonProps={{ 'aria-label': 'Choose currency' }} placeholder="Type here" />
                   <Input label="Suffix" suffix="Gram" defaultValue="This is the input" readOnly />
                   <Input label="Right icon" suffix="◔" suffixInteractive suffixButtonProps={{ 'aria-label': 'Toggle visibility' }} defaultValue="••••••••••" readOnly />
-                </div>
+                </>, { flexDirection: 'column', alignItems: 'stretch', gap: 14 })}
               </div>
-              
-              <div>
-                <div className="comp-label">Additional info</div>
-                <div className="comp-stage" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 14 }}>
-                  <Input label="Label" optionalText="Optional" placeholder="Placeholder" />
-                  <Input
-                    label="Label"
-                    required
-                    description="Put the description here"
-                    helperText="You can put the helper here."
-                    placeholder="Placeholder"
-                  />
-                </div>
-              </div>
-              <div>
-                <div className="comp-label">Error &amp; disabled</div>
-                <div className="comp-stage" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 14 }}>
-                  <Input label="Error (default)" state="error" defaultValue="Placeholder" helperText="You can put error message here." readOnly />
-                  <Input label="Error (while typing)" state="error" className="ds-inp-focus" defaultValue="Placeholder|" helperText="You can put error message here." readOnly />
-                  <Input label="Disabled" defaultValue="Placeholder" readOnly disabled />
-                </div>
-              </div>
-
             </div>
           </div>
 
           {/* ── Badges ───────────────────────────────────────── */}
           <div className="section" id="badges">
-            <div className="eyebrow"><span className="eyebrow-num">06 ·</span>Components</div>
-            {renderSectionHeader('badges', 'Badges', 'Status indicators and categorical labels — variants × intents × sizes')}
+            {renderSectionHeader('badges', '06 ·', 'Components', 'Badges', 'Status indicators and categorical labels — variants × intents × sizes')}
             <div className="comp-section">
-              <div className="comp-label">Intent (subtle)</div>
-              <div className="comp-stage">
+              {stageWrap('subtle', 'primary · blue · green · orange · red · yellow · neutral', <>
                 <Badge intent="primary">Active</Badge>
                 <Badge intent="blue">Processing</Badge>
                 <Badge intent="green">Funded</Badge>
@@ -480,167 +459,119 @@ export default function ManifestPage() {
                 <Badge intent="red">Overdue</Badge>
                 <Badge intent="yellow">Review</Badge>
                 <Badge intent="neutral">Archived</Badge>
-              </div>
+              </>)}
             </div>
             <div className="comp-section">
-              <div className="comp-label">Solid</div>
-              <div className="comp-stage">
+              {stageWrap('solid', 'primary · blue · green · orange · red · neutral', <>
                 <Badge variant="solid" intent="primary">Label</Badge>
                 <Badge variant="solid" intent="blue">Label</Badge>
                 <Badge variant="solid" intent="green">Label</Badge>
                 <Badge variant="solid" intent="orange">Label</Badge>
                 <Badge variant="solid" intent="red">Label</Badge>
                 <Badge variant="solid" intent="neutral">Label</Badge>
-              </div>
+              </>)}
             </div>
             <div className="comp-section">
-              <div className="comp-label">Outline &amp; Inverted</div>
-              <div className="comp-stage">
-                <Badge variant="outline" intent="primary">Label</Badge>
-                <Badge variant="inverted">Label</Badge>
-                <Badge variant="inverted">1</Badge>
-              </div>
-            </div>
-            <div className="comp-section">
-              <div className="comp-label">Sizes</div>
-              <div className="comp-stage">
+              {stageWrap('sizes', 'sm · md', <>
                 <Badge variant="solid" size="sm">Small</Badge>
                 <Badge variant="solid" size="md">Medium</Badge>
-              </div>
-            </div>
-            <div className="comp-section">
-              <div className="comp-label">Icons &amp; dots</div>
-              <div className="comp-stage">
-                <Badge variant="solid" leadingIcon={
-                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="6" cy="6" r="4.5" /><path d="M6 3.5v2.5l1.5 1" strokeLinecap="round" /></svg>
-                }>Left icon</Badge>
-                <Badge variant="solid" trailingIcon={
-                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M4 2l4 4-4 4" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                }>Right icon</Badge>
-                <Badge variant="solid" dot>Dot</Badge>
-              </div>
+              </>)}
             </div>
           </div>
 
           {/* ── Cards ────────────────────────────────────────── */}
           <div className="section" id="cards">
-            <div className="eyebrow"><span className="eyebrow-num">07 ·</span>Components</div>
-            {renderSectionHeader('cards', 'Cards', 'Surface container for grouped information')}
-            <div className="g2">
-              <div className="demo-card">
-                <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>Grassroots Growth Series</div>
-                <div style={{ fontSize: 13, color: 'var(--neutral-600)', marginBottom: 16 }}>Series 3 · Balanced</div>
-                <div className="stat-row">
-                  <div className="stat"><div className="stat-label">AUM</div><div className="stat-val" style={{ color: 'var(--primary-500)' }}>Rp48M</div></div>
-                  <div className="stat"><div className="stat-label">IRR</div><div className="stat-val" style={{ color: 'var(--green-600)' }}>18.4%</div></div>
-                  <div className="stat"><div className="stat-label">LPs</div><div className="stat-val">24</div></div>
+            {renderSectionHeader('cards', '07 ·', 'Components', 'Cards', 'Surface container for grouped information')}
+            <div className="comp-section">
+              {stageWrap('variants', '.fds-card', <>
+                <div className="demo-card" style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>Grassroots Growth Series</div>
+                  <div style={{ fontSize: 13, color: 'var(--neutral-600)', marginBottom: 16 }}>Series 3 · Balanced</div>
+                  <div className="stat-row">
+                    <div className="stat"><div className="stat-label">AUM</div><div className="stat-val" style={{ color: 'var(--primary-500)' }}>Rp48M</div></div>
+                    <div className="stat"><div className="stat-label">IRR</div><div className="stat-val" style={{ color: 'var(--green-600)' }}>18.4%</div></div>
+                    <div className="stat"><div className="stat-label">LPs</div><div className="stat-val">24</div></div>
+                  </div>
                 </div>
-              </div>
-              <div className="demo-card" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ fontWeight: 600, fontSize: 15 }}>Capital Call</div>
-                  <Badge intent="orange">Pending</Badge>
+                <div className="demo-card" style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ fontWeight: 600, fontSize: 15 }}>Capital Call</div>
+                    <Badge intent="orange">Pending</Badge>
+                  </div>
+                  <div style={{ fontSize: 13, color: 'var(--neutral-600)' }}>
+                    Q1 2026 distribution notice requires confirmation before May 1.
+                  </div>
+                  <div style={{ display: 'flex', gap: 8, marginTop: 'auto' }}>
+                    <Button size="sm">Review</Button>
+                    <Button variant="outline" size="sm">Dismiss</Button>
+                  </div>
                 </div>
-                <div style={{ fontSize: 13, color: 'var(--neutral-600)' }}>
-                  Q1 2026 distribution notice requires confirmation before May 1.
-                </div>
-                <div style={{ display: 'flex', gap: 8, marginTop: 'auto' }}>
-                  <Button size="sm">Review</Button>
-                  <Button variant="outline" size="sm">Dismiss</Button>
-                </div>
-              </div>
+              </>, { alignItems: 'stretch' })}
             </div>
           </div>
 
           {/* ── Toggles ──────────────────────────────────────── */}
           <div className="section" id="toggles">
-            <div className="eyebrow"><span className="eyebrow-num">08 ·</span>Components</div>
-            {renderSectionHeader('toggles', 'Toggles', 'Binary on/off switch — 2 sizes, 4 states, optional label and helper')}
-            <div className="comp-section">
-              <div className="comp-label">States</div>
-              <div className="comp-stage">
-                <Toggle defaultChecked />
-                <Toggle />
-                <Toggle defaultChecked disabled />
-                <Toggle disabled />
+            {renderSectionHeader('toggles', '08 ·', 'Components', 'Toggles', 'Binary on/off switch — 2 sizes, 4 states, optional label and helper')}
+            <div className="g2">
+              <div className="comp-section" style={{ margin: 0 }}>
+                {stageWrap('states', 'on · off · on-disabled · off-disabled', <>
+                  <Toggle defaultChecked />
+                  <Toggle />
+                  <Toggle defaultChecked disabled />
+                  <Toggle disabled />
+                </>)}
               </div>
-            </div>
-            <div className="comp-section">
-              <div className="comp-label">Variants</div>
-              <div className="comp-stage" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 16 }}>
-                <Toggle defaultChecked />
-                <Toggle defaultChecked label="Remember me" />
-                <Toggle defaultChecked label="Remember me" helperText="Save my login details for next time." />
-              </div>
-            </div>
-            <div className="comp-section">
-              <div className="comp-label">Sizes</div>
-              <div className="comp-stage">
-                <Toggle defaultChecked size="sm" label="Small" />
-                <Toggle defaultChecked size="md" label="Medium" />
+              <div className="comp-section" style={{ margin: 0 }}>
+                {stageWrap('sizes', 'sm · md', <>
+                  <Toggle defaultChecked size="sm" label="Small" />
+                  <Toggle defaultChecked size="md" label="Medium" />
+                </>)}
               </div>
             </div>
           </div>
 
           {/* ── Selectable Cards ─────────────────────────────── */}
           <div className="section" id="selectable-cards">
-            <div className="eyebrow"><span className="eyebrow-num">09 ·</span>Components</div>
-            {renderSectionHeader('selectable-cards', 'Selectable Cards', 'Card-shaped radio / checkbox — tap the whole card to select')}
-            <div className="comp-section">
-              <div className="comp-label">States</div>
-              <div className="comp-stage" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 12 }}>
-                <SelectableCard name="state-demo" title="This is the card title" description="Enter description here, max. 2 lines" />
-                <SelectableCard name="state-demo" title="This is the card title" description="Enter description here, max. 2 lines" defaultChecked />
-                <SelectableCard name="state-demo-2" title="This is the card title" description="Enter description here, max. 2 lines" disabled />
-              </div>
-            </div>
+            {renderSectionHeader('selectable-cards', '09 ·', 'Components', 'Selectable Cards', 'Card-shaped radio / checkbox — tap the whole card to select')}
             <div className="g2">
-              <div>
-                <div className="comp-label">With double content</div>
-                <SelectableCard name="dbl" secondary={<><span>Jangka waktu</span><span style={{ fontSize: 14, fontWeight: 700, color: 'var(--neutral-900)' }}>9 bulan</span></>} title={<><span style={{ fontSize: 12, fontWeight: 500, color: 'var(--neutral-600)' }}>Keuntungan</span><span style={{ fontSize: 14, fontWeight: 700, color: 'var(--green-600)' }}>Rp1.900.000</span></>} defaultChecked />
+              <div className="comp-section" style={{ margin: 0 }}>
+                {stageWrap('states', 'default · selected · disabled', <>
+                  <SelectableCard name="state-demo" title="This is the card title" description="Enter description here, max. 2 lines" />
+                  <SelectableCard name="state-demo" title="This is the card title" description="Enter description here, max. 2 lines" defaultChecked />
+                  <SelectableCard name="state-demo-2" title="This is the card title" description="Enter description here, max. 2 lines" disabled />
+                </>, { flexDirection: 'column', alignItems: 'stretch', gap: 12 })}
               </div>
-              <div>
-                <div className="comp-label">With prefix icon</div>
-                <SelectableCard
-                  name="prefix"
-                  title="This is the card title"
-                  description="Enter description here, max. 2 lines"
-                  prefixIcon={
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="8" cy="8" r="6" /><path d="M8 4v4l3 1.5" strokeLinecap="round" /></svg>
-                  }
-                />
-              </div>
-              <div>
-                <div className="comp-label">With component slot</div>
-                <SelectableCard
-                  name="slot"
-                  title="This is the card title"
-                  description="Enter description here, max. 2 lines"
-                  slot="Swappable component"
-                />
-              </div>
-              <div>
-                <div className="comp-label">Combined with ribbon</div>
-                <SelectableCard
-                  name="ribbon"
-                  ribbon="Paling Untung"
-                  secondary={<><span>Jangka waktu</span><span style={{ fontSize: 14, fontWeight: 700, color: 'var(--neutral-900)' }}>9 bulan</span></>}
-                  title={<><span style={{ fontSize: 12, fontWeight: 500, color: 'var(--neutral-600)' }}>Keuntungan</span><span style={{ fontSize: 14, fontWeight: 700, color: 'var(--green-600)' }}>Rp1.900.000</span></>}
-                />
+              <div className="comp-section" style={{ margin: 0 }}>
+                {stageWrap('variants', 'double content · prefix icon · slot', <>
+                  <SelectableCard name="dbl" secondary={<><span>Jangka waktu</span><span style={{ fontSize: 14, fontWeight: 700, color: 'var(--neutral-900)' }}>9 bulan</span></>} title={<><span style={{ fontSize: 12, fontWeight: 500, color: 'var(--neutral-600)' }}>Keuntungan</span><span style={{ fontSize: 14, fontWeight: 700, color: 'var(--green-600)' }}>Rp1.900.000</span></>} defaultChecked />
+                  <SelectableCard
+                    name="prefix"
+                    title="This is the card title"
+                    description="Enter description here, max. 2 lines"
+                    prefixIcon={
+                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="8" cy="8" r="6" /><path d="M8 4v4l3 1.5" strokeLinecap="round" /></svg>
+                    }
+                  />
+                  <SelectableCard
+                    name="slot"
+                    title="This is the card title"
+                    description="Enter description here, max. 2 lines"
+                    slot="Swappable component"
+                  />
+                </>, { flexDirection: 'column', alignItems: 'stretch', gap: 12 })}
               </div>
             </div>
           </div>
 
           {/* ── Modals ───────────────────────────────────────── */}
           <div className="section" id="modals">
-            <div className="eyebrow"><span className="eyebrow-num">10 ·</span>Components</div>
-            {renderSectionHeader('modals', 'Modals', 'Temporary dialog windows — default + dialog variants × 3 sizes')}
+            {renderSectionHeader('modals', '10 ·', 'Components', 'Modals', 'Temporary dialog windows — default + dialog variants × 3 sizes')}
             <div className="comp-section">
-              <div className="comp-label">Live demo</div>
-              <div className="comp-stage">
+              {stageWrap('live demo', 'default · dialog', <>
                 <Button onClick={() => setModalOpen(true)}>Open default modal</Button>
                 <Button variant="outline" onClick={() => setDialogOpen(true)}>Open success dialog</Button>
-              </div>
+              </>)}
             </div>
             <Modal
               open={modalOpen}
@@ -664,14 +595,12 @@ export default function ManifestPage() {
 
           {/* ── Bottom Sheets ────────────────────────────────── */}
           <div className="section" id="bottom-sheets">
-            <div className="eyebrow"><span className="eyebrow-num">11 ·</span>Components</div>
-            {renderSectionHeader('bottom-sheets', 'Bottom Sheets', 'Mobile sheets that slide up from the bottom — default + fullscreen')}
+            {renderSectionHeader('bottom-sheets', '11 ·', 'Components', 'Bottom Sheets', 'Mobile sheets that slide up from the bottom — default + fullscreen')}
             <div className="comp-section">
-              <div className="comp-label">Live demo</div>
-              <div className="comp-stage">
+              {stageWrap('live demo', 'default · fullscreen', <>
                 <Button onClick={() => setSheetOpen(true)}>Open bottom sheet</Button>
                 <Button variant="outline" onClick={() => setSheetFullOpen(true)}>Open fullscreen</Button>
-              </div>
+              </>)}
             </div>
             <BottomSheet
               open={sheetOpen}
@@ -696,58 +625,47 @@ export default function ManifestPage() {
             </BottomSheet>
           </div>
 
-          {/* ── Navigation Bars ──────────────────────────────── */}
+          {/* ── Navigation ───────────────────────────────────── */}
           <div className="section" id="navigation-bars">
-            <div className="eyebrow"><span className="eyebrow-num">12 ·</span>Components</div>
-            {renderSectionHeader('navigation-bars', 'Navigation Bars', 'Bottom tab bar — equal-width tabs with icon + label, badge and feature variants')}
-            <div className="comp-section">
-              <div className="comp-label">Default tabs</div>
-              <div style={{ maxWidth: 420, border: '1px solid var(--neutral-200)', borderRadius: 12, overflow: 'hidden' }}>
-                <NavigationBar
-                  items={[
-                    { id: 'home', label: 'Home', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 11l9-8 9 8M5 10v10h14V10" /></svg>, active: navbarActive === 'home', onClick: () => setNavbarActive('home') },
-                    { id: 'modal', label: 'Modal', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9" /><path d="M8 12h8M12 8v8" /></svg>, badge: 1, active: navbarActive === 'modal', onClick: () => setNavbarActive('modal') },
-                    { id: 'scan', label: 'Scan', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="6" height="6" /><rect x="15" y="3" width="6" height="6" /><rect x="3" y="15" width="6" height="6" /><path d="M15 15h6v6" /></svg>, feature: true, active: navbarActive === 'scan', onClick: () => setNavbarActive('scan') },
-                    { id: 'celengan', label: 'Celengan', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12c0-4 4-7 9-7s9 3 9 7-4 7-9 7c-2 0-4-.5-5.5-1.5L3 19l1.5-3.5C3.5 14.5 3 13.5 3 12z" /></svg>, active: navbarActive === 'celengan', onClick: () => setNavbarActive('celengan') },
-                    { id: 'transaksi', label: 'Transaksi', icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="4" y="4" width="16" height="16" rx="2" /><path d="M8 9h8M8 13h8M8 17h5" /></svg>, active: navbarActive === 'transaksi', onClick: () => setNavbarActive('transaksi') },
-                  ]}
-                />
+            {renderSectionHeader('navigation-bars', '12 ·', 'Components', 'Navigation', 'Bottom tab bar and top app bar')}
+            <div className="g2">
+              <div className="comp-section" style={{ margin: 0 }}>
+                {stageWrap('nav bar', 'default · badge',
+                  <div style={{ border: '1px solid var(--fds-line)', borderRadius: 8, overflow: 'hidden', width: '100%', maxWidth: 360 }}>
+                    <NavigationBar
+                      items={[
+                        { id: 'home', label: 'Home', icon: <Home size={20} />, active: navbarActive === 'home', onClick: () => setNavbarActive('home') },
+                        { id: 'modal', label: 'Modal', icon: <PlusCircle size={20} />, badge: 1, active: navbarActive === 'modal', onClick: () => setNavbarActive('modal') },
+                        { id: 'scan', label: 'Scan', icon: <ScanLine size={20} />, active: navbarActive === 'scan', onClick: () => setNavbarActive('scan') },
+                        { id: 'celengan', label: 'Celengan', icon: <Wallet size={20} />, active: navbarActive === 'celengan', onClick: () => setNavbarActive('celengan') },
+                        { id: 'transaksi', label: 'Transaksi', icon: <FileText size={20} />, active: navbarActive === 'transaksi', onClick: () => setNavbarActive('transaksi') },
+                      ]}
+                    />
+                  </div>
+                )}
               </div>
-            </div>
-          </div>
-
-          {/* ── Navigation Headers ───────────────────────────── */}
-          <div className="section" id="navigation-headers">
-            <div className="eyebrow"><span className="eyebrow-num">13 ·</span>Components</div>
-            {renderSectionHeader('navigation-headers', 'Navigation Headers', 'Top app bar — back + title + optional trailing icons or link')}
-            <div className="comp-section">
-              <div className="comp-label">Light + dark variants</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 420 }}>
-                <div style={{ border: '1px solid var(--neutral-200)', borderRadius: 12, overflow: 'hidden' }}>
-                  <NavigationHeader title="Title here" showStatusBar />
-                </div>
-                <div style={{ borderRadius: 12, overflow: 'hidden' }}>
-                  <NavigationHeader title="Title here" variant="dark" showStatusBar />
-                </div>
-              </div>
-            </div>
-            <div className="comp-section">
-              <div className="comp-label">With trailing icons</div>
-              <div style={{ border: '1px solid var(--neutral-200)', borderRadius: 12, overflow: 'hidden', maxWidth: 420 }}>
-                <NavigationHeader
-                  title="Title here"
-                  showStatusBar
-                  trailingIcons={[
-                    <svg key="1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="M16 16l4 4" strokeLinecap="round" /></svg>,
-                    <svg key="2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 8-3 8h18s-3-1-3-8M10 21h4" /></svg>,
-                  ]}
-                />
-              </div>
-            </div>
-            <div className="comp-section">
-              <div className="comp-label">With link button</div>
-              <div style={{ border: '1px solid var(--neutral-200)', borderRadius: 12, overflow: 'hidden', maxWidth: 420 }}>
-                <NavigationHeader title="Title here" showStatusBar link="Link" />
+              <div className="comp-section" style={{ margin: 0 }}>
+                {stageWrap('nav header', 'light · dark · trailing icons · link', <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', maxWidth: 360 }}>
+                  <div style={{ border: '1px solid var(--fds-line)', borderRadius: 8, overflow: 'hidden' }}>
+                    <NavigationHeader title="Title here" showStatusBar />
+                  </div>
+                  <div style={{ borderRadius: 8, overflow: 'hidden' }}>
+                    <NavigationHeader title="Title here" variant="dark" showStatusBar />
+                  </div>
+                  <div style={{ border: '1px solid var(--fds-line)', borderRadius: 8, overflow: 'hidden' }}>
+                    <NavigationHeader
+                      title="Title here"
+                      showStatusBar
+                      trailingIcons={[
+                        <svg key="1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="M16 16l4 4" strokeLinecap="round" /></svg>,
+                        <svg key="2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 8-3 8h18s-3-1-3-8M10 21h4" /></svg>,
+                      ]}
+                    />
+                  </div>
+                  <div style={{ border: '1px solid var(--fds-line)', borderRadius: 8, overflow: 'hidden' }}>
+                    <NavigationHeader title="Title here" showStatusBar link="Link" />
+                  </div>
+                </div>)}
               </div>
             </div>
           </div>
@@ -758,8 +676,7 @@ export default function ManifestPage() {
 
           {/* ── System Prompts ───────────────────────────────── */}
           <div className="section" id="prompts">
-            <div className="eyebrow"><span className="eyebrow-num">14 ·</span>AI Tools</div>
-            {renderSectionHeader('prompts', 'System Prompts', 'Copy into Claude or Cursor to enforce token compliance on every generation')}
+            {renderSectionHeader('prompts', '14 ·', 'AI Tools', 'System Prompts', 'Copy into Claude or Cursor to enforce token compliance on every generation')}
             <div className="prompt-card">
               <div className="prompt-header">
                 <span className="prompt-lbl">Claude · System Prompt</span>
@@ -778,8 +695,7 @@ export default function ManifestPage() {
 
           {/* ── llms.txt Spec ────────────────────────────────── */}
           <div className="section" id="llms">
-            <div className="eyebrow"><span className="eyebrow-num">15 ·</span>AI Tools</div>
-            {renderSectionHeader('llms', 'llms.txt Spec', 'Machine-readable endpoint — one fetch gives an LLM the complete system')}
+            {renderSectionHeader('llms', '15 ·', 'AI Tools', 'llms.txt Spec', 'Machine-readable endpoint — one fetch gives an LLM the complete system')}
             <div className="notice">
               <strong>AI Agents:</strong> Fetch <code>https://funds-lite.vercel.app/llms.txt</code> to get the full
               spec in one request. No HTML, no scripts — clean markdown covering all color tokens, spacing, typography
