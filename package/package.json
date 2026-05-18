@@ -1,5 +1,5 @@
 {
-  "name": "@funds/funds-lite",
+  "name": "@mhazki/funds-lite",
   "version": "1.0.1",
   "description": "FunDS Lite design system — Amartha Financial",
   "main": "dist/index.js",
@@ -29,7 +29,7 @@
     "react-dom": ">=18"
   },
   "publishConfig": {
-    "registry": "https://registry.figma.com/npm/63930366-33d5-4ef4-b47b-457356de8794/registry/"
+    "access": "public"
   },
   "devDependencies": {
     "@types/react": "^18",
