@@ -1,5 +1,7 @@
 node_modules/
 package/.npmrc
+package/dist/
+package/node_modules/
 working_local/
 .DS_Store
 reference/
